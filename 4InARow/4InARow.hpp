@@ -1,4 +1,5 @@
 
+#pragma once
 
 namespace 4InARow
 {
@@ -23,7 +24,14 @@ class Game
 
     private:
 
+        int* m_pBoard;
+
+        int m_width;
+        int m_height;
+
 }
 
 };
+
+#include "4InARow.ipp"
 
