@@ -15,6 +15,8 @@ FourInARow::Game::Game(int width, int height)
     {
         m_pBoard[i] = 0;
     }
+
+    m_turnPlayer = 1;
 }
 
 FourInARow::Game::~Game()
@@ -22,17 +24,56 @@ FourInARow::Game::~Game()
     delete [] m_pBoard;
 }
 
-int FourInARow::Game::GetBoardWidth(void)
+
+int FourInARow::Game::PutCoin(int column, int player)
 {
-    return m_width;
+    if (player == 0) player = m_turnPlayer;
+
+    if (player != m_turnPlayer)
+    {
+        return 1;
+    }
+
+    int node_x_i = column;
+    int node_y_i = 0;
+    while ()
+    {
+        if (node_y_i == m_height)
+        {
+            break;
+        }
+        if (m_pBoard[node_y_i * m_width + node_x_i] != 0)
+        {
+            break;
+        }
+
+        node_y_i++;
+    }
+
+    node_y_i--;
+
+    if (node_y_i < 0)
+    {
+        return 2;
+    }
+
+    m_pBoard[node_y_i * m_width + node_x_i] = player;
+
+    if (m_turnPlayer == 1)
+    {
+        m_turnPlayer = 2;
+    }
+    if (m_turnPlayer == 2)
+    {
+        m_turnPlayer = 1;
+    }
+
+    UpdateGameStatus();
+
+    return 0;
 }
 
-int FourInARow::Game::GetBoardHeight(void)
-{
-    return m_height;
-}
-
-int FourInARow::Game::PutCoin(int player, int column)
+void FourInARow::Game::UpdateGameStatus(void)
 {
 }
 
@@ -44,7 +85,7 @@ void FourInARow::Game::Print(void)
     {
         for (int x = 0; x < m_width; x++)
         {
-            printf("%d", m_pBoard[y * m_width + x]);
+            printf("%d ", m_pBoard[y * m_width + x]);
         }
         printf("\n");
     }

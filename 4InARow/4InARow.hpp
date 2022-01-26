@@ -12,10 +12,14 @@ class Game
         explicit Game(int width, int height);
         ~Game();
 
-        int GetBoardWidth(void);
-        int GetBoardHeight(void);
+        int GetBoardWidth(void)  {return m_width;};
+        int GetBoardHeight(void) {return m_height};
+        int GetWhichTurn(void)   {return m_turnPlayer;};
 
-        int PutCoin(int player, int column);
+        // 0 : sccess
+        // 1 : wrong turn
+        // 2 : no space
+        int PutCoin(int column, int player = 0);
 
         int GetGameStatus(void);
 
@@ -24,10 +28,14 @@ class Game
 
     private:
 
+        void UpdateGameStatus(void);
+
         int* m_pBoard;
 
         int m_width;
         int m_height;
+
+        int m_turnPlayer;
 
 };
 
