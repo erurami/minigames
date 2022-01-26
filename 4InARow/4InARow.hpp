@@ -1,7 +1,7 @@
 
 #pragma once
 
-namespace 4InARow
+namespace FourInARow
 {
 
 class Game
@@ -29,9 +29,9 @@ class Game
         int m_width;
         int m_height;
 
-}
-
 };
+
+}
 
 #include "4InARow.ipp"
 
