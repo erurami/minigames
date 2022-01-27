@@ -2,6 +2,7 @@
 #pragma once
 
 #include "4InARow.hpp"
+#include "utils/ArrayUtil.hpp"
 
 #include <stdio.h>
 
@@ -212,47 +213,125 @@ void FourInARow::Game::Print(bool useColor,
                              int highlightLastCoin,
                              int highlightWinningLine)
 {
-    // int **print_buffer_backcolor;
-    // int **print_buffer_forecolor;
-    // int **print_buffer_printnumber;
+    if (m_turnNumber == 0)
+    {
+        highlightLastCoin = 0;
+    }
 
-    int printing_value;
+    if (m_gameStatus == 0 || m_gameStatus == 3)
+    {
+        highlightWinningLine = 0;
+    }
 
+    if (useColor == false)
+    {
+        if (highlightLastCoin == 2)
+        {
+            highlightLastCoin = 0;
+        }
+        if (highlightWinningLine == 2)
+        {
+            highlightWinningLine = 0;
+        }
+    }
+
+    int **print_buffer_backcolor;
+    int **print_buffer_forecolor;
+    int **print_buffer_asterisk;
+    int **print_buffer_printnumber;
+
+    Alloc2dIntArray(&print_buffer_backcolor  , m_height, m_width, 0);
+    Alloc2dIntArray(&print_buffer_forecolor  , m_height, m_width, 7);
+    Alloc2dIntArray(&print_buffer_asterisk   , m_height, m_width, 0);
+    Alloc2dIntArray(&print_buffer_printnumber, m_height, m_width, 0);
+
+
+    int number_now;
     for (int y = 0; y < m_height; y++)
     {
         for (int x = 0; x < m_width; x++)
         {
-            printing_value = m_pBoard[y * m_width + x];
+            number_now = m_pBoard[y * m_width + x];
+
+            print_buffer_printnumber[y][x] = number_now;
 
             if (useColor)
             {
-                printf("\033[%dm", printing_value == 0 ? 37 : printing_value + 30);
-            }
-            if (highlightLastCoin == 2 && x == m_lastX && y == m_lastY)
-            {
-                printf("\033[44m");
-            }
-
-
-            printf("%d", printing_value);
-
-
-            if (useColor)
-            {
-                printf("\033[m");
-            }
-
-            if (highlightLastCoin == 1 && x == m_lastX && y == m_lastY)
-            {
-                printf("*");
-            }
-            else
-            {
-                printf(" ");
+                if (number_now == 0)
+                {
+                    print_buffer_forecolor[y][x] = 7;
+                }
+                else
+                {
+                    print_buffer_forecolor[y][x] = number_now;
+                }
             }
         }
-        printf("\n");
     }
-    printf("\033[m");
+
+
+    if (highlightLastCoin == 1)
+    {
+        print_buffer_asterisk[m_lastY][m_lastX] = 1;
+    }
+
+    if (highlightLastCoin == 2)
+    {
+        print_buffer_backcolor[m_lastY][m_lastX] = 4;
+    }
+
+    if (highlightWinningLine == 1)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            print_buffer_asterisk
+                [m_pWinningLine[i * 2 + 1]]
+                [m_pWinningLine[i * 2    ]] = 1;
+        }
+    }
+
+    if (highlightWinningLine == 2)
+    {
+        for (int i = 0; i < 4; i++)
+        {
+            print_buffer_backcolor
+                [m_pWinningLine[i * 2 + 1]]
+                [m_pWinningLine[i * 2    ]] = 3;
+        }
+    }
+
+    if (useColor)
+    {
+        for (int y = 0; y < m_height; y++)
+        {
+            for (int x = 0; x < m_width; x++)
+            {
+                printf("\033[3%1dm", print_buffer_forecolor[y][x]);
+                printf("\033[4%1dm", print_buffer_backcolor[y][x]);
+                printf("%d", print_buffer_printnumber[y][x]);
+                printf("\033[m");
+                printf("%c", print_buffer_asterisk[y][x] == 1 ? '*' : ' ');
+            }
+            printf("\033[m");
+            printf("\n");
+        }
+    }
+    else
+    {
+        for (int y = 0; y < m_height; y++)
+        {
+            for (int x = 0; x < m_width; x++)
+            {
+                printf("%d", print_buffer_printnumber[y][x]);
+                printf("%c", print_buffer_asterisk[y][x] == 1 ? '*' : ' ');
+            }
+            printf("\n");
+        }
+    }
+
+    Free2dIntArray(&print_buffer_backcolor  , m_height, m_width);
+    Free2dIntArray(&print_buffer_forecolor  , m_height, m_width);
+    Free2dIntArray(&print_buffer_asterisk   , m_height, m_width);
+    Free2dIntArray(&print_buffer_printnumber, m_height, m_width);
 }
 
