@@ -23,3 +23,8 @@ Reversi::Game::~Game()
 }
 
 
+void Reversi::Game::Print(void)
+{
+}
+
+
