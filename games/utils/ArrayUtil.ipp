@@ -4,16 +4,16 @@
 #include "ArrayUtil.hpp"
 
 
-void Alloc2dArray(int ***pArray, int size1, int size2, int resetTo)
+void Alloc2dIntArray(int ***pArray, int size1, int size2, int resetTo)
 {
     *pArray = new int* [size1];
     for (int i = 0; i < size1; i++)
     {
-        (*pArray)[i] = new int [size2](resetTo);
+        (*pArray)[i] = new int [size2]{resetTo};
     }
 }
 
-void Free2dArray(int ***pArray, int size1, int size2)
+void Free2dIntArray(int ***pArray, int size1, int size2)
 {
     for (int i = 0; i < size1; i++)
     {
