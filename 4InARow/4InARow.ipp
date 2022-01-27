@@ -15,7 +15,7 @@ FourInARow::Game::Game(int width, int height)
 
     m_pGameHistory = new int [width * height * 2];
 
-    m_pWinningLine = new int [10];
+    m_pWinningLine = new int [8];
 
     m_turnPlayer = 1;
     m_turnNumber = 0;
@@ -185,14 +185,14 @@ void FourInARow::Game::UpdateGameStatus(void)
             m_pWinningLine[(continuing_length - 1) * 2]     = searching_x;
             m_pWinningLine[(continuing_length - 1) * 2 + 1] = searching_y;
 
-            if (continuing_length >= 4 && continuing_number != 0)
+            if (continuing_length >= 4)
             {
-                m_gameStatus = continuing_number;
-                for (int i = 0; i < 4; i++)
+                continuing_length = 1;
+                if (continuing_number != 0)
                 {
-                    printf("(%d, %d)\n", m_pWinningLine[i * 2], m_pWinningLine[i * 2 + 1]);
+                    m_gameStatus = continuing_number;
+                    return;
                 }
-                return;
             }
         }
     }
@@ -208,8 +208,14 @@ void FourInARow::Game::UpdateGameStatus(void)
 
 
 // TODO : use array to contain number and highlight options and print
-void FourInARow::Game::Print(bool useColor, int highlightLastCoin)
+void FourInARow::Game::Print(bool useColor,
+                             int highlightLastCoin,
+                             int highlightWinningLine)
 {
+    // int **print_buffer_backcolor;
+    // int **print_buffer_forecolor;
+    // int **print_buffer_printnumber;
+
     int printing_value;
 
     for (int y = 0; y < m_height; y++)

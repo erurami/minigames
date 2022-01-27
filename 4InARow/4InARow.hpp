@@ -28,13 +28,14 @@ class Game
         void Undo(void);
 
 
-        // param : highlightLastCoin
-        //
+        // highlighting parameter options
         //            0 : no highlight
         //            1 : add asterisk
         //            2 : highlight text (only when use color)
+
         void Print(bool useColor = false,
-                   int highlightLastCoin = 0);
+                   int  highlightLastCoin = 0,
+                   int  highlightWinningLine = 0);
 
 
     private:
