@@ -23,14 +23,25 @@ class Game
         //   0 : success
         //   1 : wrong position
         //   2 : already put
+        //   3 : non-placable
         int PutDisc(int x, int y);
 
         void Undo(void);
 
-        void Print(bool useColor = true);
+        // printPlacable : 
+        //   0 : no
+        //   1 : yes
+        void Print(bool useColor = false,
+                   bool printRuler = false,
+                   int  printPlacable = 0);
 
 
     private:
+
+        void UpdatePlacablePos(void);
+        bool SearchLine(int fromX, int fromY,
+                        int directionX, int directionY,
+                        int searchFor);
 
         int** m_pBoard;
 
