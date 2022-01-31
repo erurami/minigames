@@ -15,6 +15,7 @@ class Game
 
         int GetBoardWidth(void)  {return m_width;};
         int GetBoardHeight(void) {return m_height;};
+        int GetAt(int x, int y) {return m_pBoard[y][x];};
         int GetWhichTurn(void);
         // return : total placable position count
         int GetPlacablePositions(int*** pPlacePositionBufAddr);
@@ -30,7 +31,7 @@ class Game
 
         // printPlacable : 
         //   0 : no
-        //   1 : yes
+        //   1 : yes (only when useColor is true)
         void Print(bool useColor = false,
                    bool printRuler = false,
                    int  printPlacable = 0);

@@ -219,10 +219,70 @@ int Reversi::Game::PutDisc(int x, int y)
 
     m_pBoard[y][x] = m_turnPlayer;
 
+    for (int i = 0; i < 8; i++)
+    {
+        int next_position[2] = {y + search_directions[i][1],
+                                x + search_directions[i][0]};
+
+        if (next_position[0] < 0 ||
+            next_position[0] >= m_height ||
+            next_position[1] < 0 ||
+            next_position[1] >= m_width)
+        {
+            continue;
+        }
+
+        if (m_pBoard[next_position[0]][next_position[1]] == 0)
+        {
+            continue;
+        }
+        if (m_pBoard[next_position[0]][next_position[1]] == m_turnPlayer)
+        {
+            continue;
+        }
+        if (SearchLine(x, y,
+                       search_directions[i][0], search_directions[i][1],
+                       m_turnPlayer) == false)
+        {
+            continue;
+        }
+
+        int x_i = x;
+        int y_i = y;
+
+        x_i += search_directions[i][0];
+        y_i += search_directions[i][1];
+        while (1)
+        {
+            if (x_i < 0 ||
+                x_i >= m_width ||
+                y_i < 0 ||
+                y_i >= m_height)
+            {
+                break;
+            }
+
+            if (m_pBoard[y_i][x_i] == m_turnPlayer)
+            {
+                break;
+            }
+
+            m_pBoard[y_i][x_i] = m_turnPlayer;
+
+            x_i += search_directions[i][0];
+            y_i += search_directions[i][1];
+        }
+    }
+
     m_turnNumber++;
-    m_turnPlayer = m_turnNumber % 2 + 1;
+    m_turnPlayer = m_turnPlayer == 2 ? 1 : 2;
 
     UpdatePlacablePos();
+
+    if (m_placablePosCount == 0)
+    {
+        m_turnPlayer = m_turnPlayer == 2 ? 1 : 2;
+    }
 
     return 0;
 }
@@ -251,8 +311,8 @@ void Reversi::Game::UpdatePlacablePos(void)
                 int search_direction[2] = {search_directions[i][0],
                                            search_directions[i][1]};
 
-                int next_position[2] = {y + search_direction[0],
-                                        x + search_direction[1]};
+                int next_position[2] = {y + search_direction[1],
+                                        x + search_direction[0]};
 
                 if (next_position[0] <  0 ||
                     next_position[0] >= m_height ||
@@ -270,7 +330,7 @@ void Reversi::Game::UpdatePlacablePos(void)
                 }
 
                 if (SearchLine(x, y,
-                               search_direction[1], search_direction[0],
+                               search_direction[0], search_direction[1],
                                next_position_color == 1 ? 2 : 1))
                 {
                     pPlacable_positions[y][x] = 1;
