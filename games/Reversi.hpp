@@ -9,7 +9,8 @@ class Game
 
     public:
 
-        explicit Game(int width = 8, int height = 8);
+        explicit Game(int width, int height);
+        explicit Game();
         ~Game();
 
         int GetBoardWidth(void)  {return m_width;};
@@ -18,11 +19,15 @@ class Game
         // return : total placable position count
         int GetPlacablePositions(int*** pPlacePositionBufAddr);
 
+        // return :
+        //   0 : success
+        //   1 : wrong position
+        //   2 : already put
         int PutDisc(int x, int y);
 
         void Undo(void);
 
-        void Print(void);
+        void Print(bool useColor = true);
 
 
     private:
