@@ -41,12 +41,20 @@ Reversi::Game::Game(int width, int height)
     m_pBoard[(m_height - 1) / 2 + 1][(m_width - 1) / 2 + 1] = 2;
 
     UpdatePlacablePos();
+    UpdateGameStatus();
 }
 
 Reversi::Game::~Game()
 {
     Free2dIntArray(&m_pBoard, m_height, m_width);
     Free2dIntArray(&m_pPlacablePositions, m_height * m_width, 2);
+}
+
+
+int Reversi::Game::GetPlacablePositions(int*** pPlacePositionBufAddr)
+{
+    *pPlacePositionBufAddr = m_pPlacablePositions;
+    return m_placablePosCount;
 }
 
 
@@ -132,50 +140,6 @@ void Reversi::Game::Print(bool useColor,
     }
 
     Free2dIntArray(&print_buf_color, m_height, m_width);
-
-    // for (int i = 0; i < m_height; i++)
-    // {
-    //     printf("%2d | ", i);
-
-    //     if (useColor)
-    //     {
-    //         printf("\033[42m");
-    //     }
-    //     for (int j = 0; j < m_width; j++)
-    //     {
-    //         if (useColor)
-    //         {
-    //             switch (m_pBoard[i][j])
-    //             {
-    //                 case 0:
-    //                     printf("\033[32m");
-    //                     break;
-    //                 case 1:
-    //                     printf("\033[30m");
-    //                     break;
-    //                 case 2:
-    //                     printf("\033[37m");
-    //                     break;
-    //             }
-    //             printf("##");
-    //             printf("\033[37m");
-    //         }
-    //         else
-    //         {
-    //             printf("%d ", m_pBoard[i][j]);
-    //         }
-    //     }
-    //     if (useColor)
-    //     {
-    //         printf("\033[m");
-    //     }
-    //     printf("\n");
-    // }
-
-    // if (useColor)
-    // {
-    //     printf("\033[m");
-    // }
 }
 
 
@@ -282,7 +246,10 @@ int Reversi::Game::PutDisc(int x, int y)
     if (m_placablePosCount == 0)
     {
         m_turnPlayer = m_turnPlayer == 2 ? 1 : 2;
+        UpdatePlacablePos();
     }
+
+    UpdateGameStatus();
 
     return 0;
 }
@@ -380,5 +347,57 @@ bool Reversi::Game::SearchLine(int fromX, int fromY,
     }
 
     return false;
+}
+
+void Reversi::Game::UpdateGameStatus(void)
+{
+    int player1_count = 0;
+    int player2_count = 0;
+    int brank_count = 0;
+    for (int y = 0; y < m_height; y++)
+    {
+        for (int x = 0; x < m_width; x++)
+        {
+            switch(m_pBoard[y][x])
+            {
+                case 0:
+                    brank_count++;
+                    break;
+                case 1:
+                    player1_count++;
+                    break;
+                case 2:
+                    player2_count++;
+                    break;
+            }
+        }
+    }
+
+    if (player1_count == 0)
+    {
+        m_gameStatus = 2;
+    }
+    if (player2_count == 0)
+    {
+        m_gameStatus = 1;
+    }
+    if (brank_count == 0)
+    {
+        if (player1_count == player2_count)
+        {
+            m_gameStatus = 3;
+        }
+        else if (player1_count > player2_count)
+        {
+            m_gameStatus = 1;
+        }
+        else if (player1_count < player2_count)
+        {
+            m_gameStatus = 2;
+        }
+    }
+
+    m_player1Count = player1_count;
+    m_player2Count = player2_count;
 }
 

@@ -13,10 +13,13 @@ class Game
         explicit Game();
         ~Game();
 
-        int GetBoardWidth(void)  {return m_width;};
-        int GetBoardHeight(void) {return m_height;};
-        int GetAt(int x, int y) {return m_pBoard[y][x];};
-        int GetWhichTurn(void);
+        int GetBoardWidth(void)   {return m_width;};
+        int GetBoardHeight(void)  {return m_height;};
+        int GetAt(int x, int y)   {return m_pBoard[y][x];};
+        int GetWhichTurn(void)    {return m_turnPlayer;};
+        int GetGameStatus(void)   {return m_gameStatus;};
+        int GetPlayer1Count(void) {return m_player1Count;};
+        int GetPlayer2Count(void) {return m_player2Count;};
         // return : total placable position count
         int GetPlacablePositions(int*** pPlacePositionBufAddr);
 
@@ -39,10 +42,19 @@ class Game
 
     private:
 
+        void UpdateGameStatus(void);
         void UpdatePlacablePos(void);
         bool SearchLine(int fromX, int fromY,
                         int directionX, int directionY,
                         int searchFor);
+
+        // 0 : game
+        // 1 : 1 win
+        // 2 : 2 win
+        // 3 : draw
+        int m_gameStatus;
+        int m_player1Count;
+        int m_player2Count;
 
         int** m_pBoard;
 
