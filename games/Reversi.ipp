@@ -373,6 +373,7 @@ void Reversi::Game::UpdateGameStatus(void)
         }
     }
 
+    m_gameStatus = 0;
     if (player1_count == 0)
     {
         m_gameStatus = 2;
