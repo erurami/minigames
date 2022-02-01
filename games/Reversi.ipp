@@ -129,14 +129,27 @@ void Reversi::Game::Print(bool useColor,
     }
     else
     {
-        // for (int y = 0; y < m_height; y++)
-        // {
-        //     for (int x = 0; x < m_width; x++)
-        //     {
-        //         printf("##");
-        //     }
-        //     printf("\n");
-        // }
+        for (int y = 0; y < m_height; y++)
+        {
+            if (printRuler) printf("%2d | ", y);
+            for (int x = 0; x < m_width; x++)
+            {
+                switch (print_buf_color[y][x])
+                {
+                    case 1:
+                    case 2:
+                        printf("  ");
+                        break;
+                    case 0:
+                        printf(" 1");
+                        break;
+                    case 7:
+                        printf(" 2");
+                        break;
+                }
+            }
+            printf("\n");
+        }
     }
 
     Free2dIntArray(&print_buf_color, m_height, m_width);
