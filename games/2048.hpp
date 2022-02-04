@@ -27,6 +27,8 @@ class Game
 
     private:
 
+        void SpawnRandomTile(void);
+
         long m_score;
 
         int** m_pBoard;

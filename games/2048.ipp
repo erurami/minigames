@@ -35,6 +35,21 @@ TwoZeroFourEight::Game::~Game()
 }
 
 
+int _k_MOVES[][2] = {
+    { 0, -1},
+    {-1,  0},
+    { 1,  0},
+    { 0,  1},
+};
+void TwoZeroFourEight::Game::Move(int direction)
+{
+}
+
+void TwoZeroFourEight::Game::SpawnRandomTile(void)
+{
+}
+
+
 void TwoZeroFourEight::Game::Print(int cellWidth)
 {
     int cell_height = (cellWidth + 1) / 2;
@@ -48,7 +63,7 @@ void TwoZeroFourEight::Game::Print(int cellWidth)
             printf("%*c", cell_width - DigitsOf(m_pBoard[y][x]), ' ');
         }
 
-        for (int i = 0; i < (cell_height - 1); i++)
+        for (int i = 0; i < cell_height; i++)
         {
             printf("\n");
         }
