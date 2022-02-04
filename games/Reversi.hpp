@@ -1,5 +1,6 @@
 
 #pragma once
+#define _REVERSI_
 
 namespace Reversi
 {
