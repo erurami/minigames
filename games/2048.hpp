@@ -1,5 +1,6 @@
 
 #pragma once
+#define _2048_
 
 namespace TwoZeroFourEight
 {
