@@ -1,6 +1,8 @@
 
 #pragma once
 
+#define _4INAROW_
+
 namespace FourInARow
 {
 
