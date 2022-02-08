@@ -6,42 +6,6 @@
 #include "utils/RandomUtil.hpp"
 #include <math.h>
 
-#ifndef RESETSEED
-#include <time.h>
-#define RESETSEED (unsigned long)time(NULL)
-#endif
-
-#define FIELDSIZE 4
-
-
-#define COLOR_TILE_2    200, 200, 200
-#define COLOR_TILE_4    200, 200, 180
-#define COLOR_TILE_8    200, 200, 150
-#define COLOR_TILE_16   200, 180, 150
-#define COLOR_TILE_32   200, 150, 150
-#define COLOR_TILE_64   150, 150, 150
-#define COLOR_TILE_128  200, 200,  50
-#define COLOR_TILE_256  200, 200,  50
-#define COLOR_TILE_512  200, 200,  50
-#define COLOR_TILE_1024 200, 200,  50
-#define COLOR_TILE_2048 200, 200,  50
-#define COLOR_TILE_4096 200, 200,  50
-#define COLOR_TILE_8192 200, 200,  50
-
-#define COLOR_NUMBER_2      0,   0,   0
-#define COLOR_NUMBER_4      0,   0,   0
-#define COLOR_NUMBER_8      0,   0,   0
-#define COLOR_NUMBER_16     0,   0,   0
-#define COLOR_NUMBER_32     0,   0,   0
-#define COLOR_NUMBER_64     0,   0,   0
-#define COLOR_NUMBER_128    0,   0,   0
-#define COLOR_NUMBER_256    0,   0,   0
-#define COLOR_NUMBER_512    0,   0,   0
-#define COLOR_NUMBER_1024   0,   0,   0
-#define COLOR_NUMBER_2048   0,   0,   0
-#define COLOR_NUMBER_4096   0,   0,   0
-#define COLOR_NUMBER_8192   0,   0,   0
-
 
 
 int DigitsOf(int number)
@@ -61,7 +25,7 @@ int DigitsOf(int number)
 
 TwoZeroFourEight::Game::Game()
 {
-    SetRandomMethod(RM_MIDDLESQUARE, RESETSEED);
+    SetRandomMethod(RANDOMMETHOD, RANDOMSEED);
 
     Alloc2dIntArray(&m_pBoard, FIELDSIZE, FIELDSIZE, 0);
 
