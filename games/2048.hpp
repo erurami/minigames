@@ -37,9 +37,13 @@
 #define COLOR_NUMBER_4096   0,   0,   0
 #define COLOR_NUMBER_8192   0,   0,   0
 
-#ifndef RESETSEED
+#ifndef RANDOMSEED
 #include <time.h>
-#define RESETSEED (unsigned long)time(NULL)
+#define RANDOMSEED (unsigned long)time(NULL)
+#endif
+
+#ifndef RANDOMMETHOD
+#define RANDOMMETHOD RM_LCG
 #endif
 
 

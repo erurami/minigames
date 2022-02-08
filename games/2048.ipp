@@ -25,7 +25,7 @@ int DigitsOf(int number)
 
 TwoZeroFourEight::Game::Game()
 {
-    SetRandomMethod(RM_MIDDLESQUARE, RESETSEED);
+    SetRandomMethod(RANDOMMETHOD, RANDOMSEED);
 
     Alloc2dIntArray(&m_pBoard, FIELDSIZE, FIELDSIZE, 0);
 
