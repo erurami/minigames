@@ -377,12 +377,11 @@ int GetPlacablePositions(
 ```c++
 int** placable_positions;
 int   placable_positions_count;
-
+//
 placable_positions_count = GetPlacablePositions(&placable_positions);
-
+//
 placable_positions[n][0]; // this is the x position of [n]th placable position
 placable_positions[n][1]; // this is the y position of [n]th placable position
-
 ```
 
 
