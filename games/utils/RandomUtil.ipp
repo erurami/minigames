@@ -17,6 +17,11 @@ unsigned long _k_RandomSeed = 0;
 bool _MiddlesquareIsBadSeed(unsigned long seed);
 unsigned long _MiddleSquare(void);
 
+// liner congruential ------
+#define _LCG_MULTIPLIER 6364136223846793005
+#define _LCG_INCREMENT 1442695040888963407
+unsigned long _LinerCongruential(void);
+
 // ===============================================
 
 
@@ -37,6 +42,10 @@ int SetRandomMethod(int method, unsigned long seed)
             }
             break;
 
+        case RM_LCG:
+            _k_RandomSeed = seed;
+            break;
+
     }
 
     return retval;
@@ -51,6 +60,9 @@ unsigned long RandomNumber(void)
     {
         case RM_MIDDLESQUARE:
             return _MiddleSquare();
+
+        case RM_LCG:
+            return _LinerCongruential();
 
         default:
             printf("randomUtil error : unknown generation method\n");
@@ -91,6 +103,16 @@ bool _MiddlesquareIsBadSeed(unsigned long seed)
 
     _k_RandomSeed = seed_before;
     return is_bad_seed;
+}
+
+// liner congruential ----------------------------
+
+unsigned long _LinerCongruential(void)
+{
+    unsigned long long randomnumber;
+    randomnumber = _LCG_MULTIPLIER * (unsigned long long)_k_RandomSeed + _LCG_INCREMENT;
+    _k_RandomSeed = (unsigned long)(randomnumber >> 32);
+    return _k_RandomSeed;
 }
 
 
