@@ -199,4 +199,237 @@ int GetWhichTurn(void);
 * 2 : Player2's turn
 
 
-### 
+### FourInARow::Game::GetTurnNumber
+Returns number of turn (Nth) turn.
+```
+int GetTurnNumber(void);
+```
+
+
+### FourInARow::Game::GetGameStatus
+Returns status of the game.
+```
+int GetGameStatus(void);
+```
+
+* 0 : normal (game is not ended)
+* 1 : player1 won
+* 2 : player2 won
+* 3 : draw
+
+
+### FourInARow::Game::GetAt
+Returns the status of specified location of the board
+```
+int GetAt(
+    [in]   int x,
+    [in]   int y
+    );
+```
+
+* Arguments
+  * x : x position to get.
+  * y : y position to get.
+* Return
+  * 0 : no coin
+  * 1 : player1's coin
+  * 2 : player2's coin
+
+---
+
+## Reversi.hpp
+
+header for reversi game
+
+### Reversi::Game
+
+### Reversi::Game::Game
+constructor of Reversi::Game
+```
+explicit Game();
+explicit Game(int width, int height);
+```
+
+* Arguments
+  * width : width of the board (optional)
+  * height : height of the board (optional)
+* Remarks
+  * if the size is not specified, the size will be 8x8.
+
+
+### Reversi::Game::PutDisc
+Puts disc on the board
+```
+int PutDisc(
+    [in]   int x,
+    [in]   int y
+    );
+```
+
+* Arguments
+  * x : x position to put.
+  * y : y position to put.
+* Returns
+  * 0 : sccess
+  * 1 : wrong position (out of the board)
+  * 2 : already put
+  * 3 : non-placable position
+
+
+### Reversi::Game::Print
+Prints the board to stdout.
+```
+void Print(
+    [in][optional] bool useColor = false,
+    [in][optional] bool printRuler = false,
+    [in][optional] int  printPlacable = 0
+    );
+```
+
+* Arguments
+  * useColor : use ascii/anci escape sequence or not.
+  * printRuler : print row and column index or not.
+  * printPlacable : highlight placable positions or not.
+    * 0 : No
+    * 1 : Yes (when only useColor == true)
+
+
+### Reversi::Game::GetBoardWidth
+Returns the width of the board.
+```
+int GetBoardWidth(void);
+```
+
+
+### Reversi::Game::GetBoardHeight
+Returns the height of the board.
+```
+int GetBoardHeight(void);
+```
+
+
+### Reversi::Game::GetAt
+Returns state of specified location on the board.
+```
+int GetAt(
+    [in]   int x,
+    [in]   int y
+    );
+```
+
+* Arguments
+  * x : x position to get
+  * y : y position to get
+
+
+### Reversi::Game::GetWhichTurn
+Returns turn of the game.
+```
+int GetWhichTurn(void);
+```
+
+* 1 : Player1's turn
+* 2 : Player2's turn
+
+
+### Reversi::Game::GetGameStatus
+Returns status of the game
+```
+int GetGameStatus(void);
+```
+
+* 0 : the game is continuing.
+* 1 : Player1 won
+* 2 : Player2 won
+* 3 : Draw
+
+
+### Reversi::Game::GetPlayer1Count
+Returns number of disc of player1 on the board.
+```
+int GetPlayer1Count(void);
+```
+
+
+### Reversi::Game::GetPlayer2Count
+Returns number of disc of player2 on the board.
+```
+int GetPlayer2Count(void);
+```
+
+
+### Reversi::Game::GetPlacablePositions
+Returns number of placable positions and placable position.
+```
+int GetPlacablePositions(
+    [out] int*** PlacablePositionsBufAddr
+    );
+```
+
+* Arguments
+  * PlacablePositionsBufAddr : pointer of pointer of pointer of int.
+    * In other words, this means pointer of (2D Array).
+    * This returns the pointer of buffer of placable positions.
+* Returns
+  * number of placable positions.
+
+* Example
+```c++
+int** placable_positions;
+int   placable_positions_count;
+
+placable_positions_count = GetPlacablePositions(&placable_positions);
+
+placable_positions[n][0]; // this is the x position of [n]th placable position
+placable_positions[n][1]; // this is the y position of [n]th placable position
+
+```
+
+
+
+## 2048.hpp
+
+header for 2048 game.
+
+
+### TwoZeroFourEight::Game
+
+2048 game class
+
+
+### TwoZeroFourEight::Game::Game
+constructor of TwoZeroFourEight::Game
+```
+explicit Game();
+```
+
+
+### TwoZeroFourEight::Game::ForceBy
+Move Tiles (This means pressing arrow keys in original 2048 game)
+```
+void ForceBy(
+    [in]  int direction
+    );
+```
+
+* Arguments
+  * direction : direction of move.
+    * UP\_2048   (0) : up
+    * LEFT\_2048 (1) : left
+    * RIGHT\_2048(2) : right
+    * DOWN\_2048 (3) : down
+
+
+### TwoZeroFourEight::Game::Print
+Print the board to stdout
+```
+void Print(
+    [in][optional]  bool useColor = false,
+    [in][optional]  int  cellWidth = 4);
+```
+
+* Arguments
+  * useColor : specifies whether use ascii/anci escape sequence
+  * cellWidth : width of one cell in characters
+
+
