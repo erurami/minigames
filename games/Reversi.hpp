@@ -1,5 +1,6 @@
 
 #pragma once
+#define _REVERSI_
 
 namespace Reversi
 {
@@ -30,7 +31,11 @@ class Game
         //   3 : non-placable
         int PutDisc(int x, int y);
 
+        // TODO:
         void Undo(void);
+        // todo:
+        //   Export(void)
+        //   Load();
 
         // printPlacable : 
         //   0 : no
