@@ -36,27 +36,27 @@ To use these libraries, you can include `minigames.hpp` in root directory
 FourInARow::Game game(width, height);
 ```
 
-* Use [PutCoin()](#FourInARow::Game::PutCoin) to put the coin.
+* Use [PutCoin()](#fourinarowgameputcoin) to put the coin.
 ```
 game.PutCoin(column);
 ```
 
-* And don't forget to check game status when you put the coin by [GetGameStatus()](#FourInARow::Game::GetGameStatus)
+* And don't forget to check game status when you put the coin by [GetGameStatus()](#fourinarowgamegetgamestatus)
 ```
 game.GetGameStatus();
 ```
 
-* You can [Undo()](#FourInARow::Game::Undo) the game if you made a mistake.
+* You can [Undo()](#fourinarowgameundo) the game if you made a mistake.
 ```
 game.Undo();
 ```
 
-* Lazy at displaying the game board? [Print()](#FourInARow::Game::Print) will do it for you.
+* Lazy at displaying the game board? [Print()](#fourinarowgameprint) will do it for you.
 ```
 game.Print();
 ```
 
-[Here](#FourInARow::Game) is more references of the functions supported.
+[Here](#fourinarowgame) is more references of the functions supported.
 
 ---
 
@@ -67,24 +67,24 @@ game.Print();
 Reversi::Game game(width, height);
 ```
 
-* Use [PutDisc()](#Reversi::Game::PutDisc) to Put disc on the board.
+* Use [PutDisc()](#reversigameputdisc) to Put disc on the board.
 ```
 game.Putdisc(x, y);
 ```
 
-* [Print()](#Reversi::Game::Print) to print the reversi board to stdout.
+* [Print()](#reversigameprint) to print the reversi board to stdout.
 ```
 game.Print();
 ```
 
-* And you'll need to check game status using [GetGameStatus()](#Reversi::Game::GetGameStatus)
+* And you'll need to check game status using [GetGameStatus()](#reversigamegetgamestatus)
 ```
 game.GetGameStatus();
 ```
 
 __Notice__ : Undo() is not available. You can't use Undo().
 
-[Here](#Reversi::Game) is more functions you can use for reversi game.
+[Here](#reversigame) is more functions you can use for reversi game.
 
 ---
 
@@ -95,17 +95,17 @@ __Notice__ : Undo() is not available. You can't use Undo().
 TwoZeroFourEight::Game game();
 ```
 
-* This game is simple, you can use [ForceBy()](#TwoZeroFourEight::Game::ForceBy) to move tiles.
+* This game is simple, you can use [ForceBy()](#twozerofoureightgameforceby) to move tiles.
 ```
 game.ForceBy([direction]_2048);
 ```
 
-* [Print()](#TwoZeroFourEight::Game::Print) outputs board to stdout.
+* [Print()](#twozerofoureightgameprint) outputs board to stdout.
 ```
 game.Print();
 ```
 
-[Here](#TwoZeroFourEight::Game) is more informations for 2048 game.
+[Here](#twozerofoureightgame) is more informations for 2048 game.
 
 ---
 
