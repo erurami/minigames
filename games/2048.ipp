@@ -13,6 +13,37 @@
 
 #define FIELDSIZE 4
 
+
+#define COLOR_TILE_2    200, 200, 200
+#define COLOR_TILE_4    200, 200, 180
+#define COLOR_TILE_8    200, 200, 150
+#define COLOR_TILE_16   200, 180, 150
+#define COLOR_TILE_32   200, 150, 150
+#define COLOR_TILE_64   150, 150, 150
+#define COLOR_TILE_128  200, 200,  50
+#define COLOR_TILE_256  200, 200,  50
+#define COLOR_TILE_512  200, 200,  50
+#define COLOR_TILE_1024 200, 200,  50
+#define COLOR_TILE_2048 200, 200,  50
+#define COLOR_TILE_4096 200, 200,  50
+#define COLOR_TILE_8192 200, 200,  50
+
+#define COLOR_NUMBER_2      0,   0,   0
+#define COLOR_NUMBER_4      0,   0,   0
+#define COLOR_NUMBER_8      0,   0,   0
+#define COLOR_NUMBER_16     0,   0,   0
+#define COLOR_NUMBER_32     0,   0,   0
+#define COLOR_NUMBER_64     0,   0,   0
+#define COLOR_NUMBER_128    0,   0,   0
+#define COLOR_NUMBER_256    0,   0,   0
+#define COLOR_NUMBER_512    0,   0,   0
+#define COLOR_NUMBER_1024   0,   0,   0
+#define COLOR_NUMBER_2048   0,   0,   0
+#define COLOR_NUMBER_4096   0,   0,   0
+#define COLOR_NUMBER_8192   0,   0,   0
+
+
+
 int DigitsOf(int number)
 {
     int digits_count = 0;
@@ -209,7 +240,9 @@ void TwoZeroFourEight::Game::SpawnRandomTile(void)
 }
 
 
-void TwoZeroFourEight::Game::Print(int cellWidth)
+void _PrintCell(int cellNumber, int cellHeight, int cellWidth, bool useColor);
+void TwoZeroFourEight::Game::Print(bool useColor,
+                                   int cellWidth)
 {
     int cell_height = (cellWidth + 1) / 2;
     int cell_width = cell_height * 2;
@@ -220,15 +253,88 @@ void TwoZeroFourEight::Game::Print(int cellWidth)
     {
         for (int x = 0; x < FIELDSIZE; x++)
         {
-            long number_to_print = m_pBoard[y][x] == 0 ? 0 : pow(2, m_pBoard[y][x]);
-            printf("%ld", number_to_print);
-            printf("%*c", cell_width - DigitsOf(number_to_print), ' ');
+            _PrintCell(m_pBoard[y][x], cell_height, cell_width, useColor);
         }
-
         for (int i = 0; i < cell_height; i++)
         {
             printf("\n");
         }
+    }
+
+}
+
+void _PrintCell(int cellNumber, int cellHeight, int cellWidth, bool useColor)
+{
+    static int stat_tile_colours[][3] = {
+        {COLOR_TILE_2},
+        {COLOR_TILE_4},
+        {COLOR_TILE_8},
+        {COLOR_TILE_16},
+        {COLOR_TILE_32},
+        {COLOR_TILE_64},
+        {COLOR_TILE_128},
+        {COLOR_TILE_256},
+        {COLOR_TILE_512},
+        {COLOR_TILE_1024},
+        {COLOR_TILE_2048},
+        {COLOR_TILE_4096},
+        {COLOR_TILE_8192},
+    };
+    static int stat_number_colours[][3] = {
+        {COLOR_NUMBER_2},
+        {COLOR_NUMBER_4},
+        {COLOR_NUMBER_8},
+        {COLOR_NUMBER_16},
+        {COLOR_NUMBER_32},
+        {COLOR_NUMBER_64},
+        {COLOR_NUMBER_128},
+        {COLOR_NUMBER_256},
+        {COLOR_NUMBER_512},
+        {COLOR_NUMBER_1024},
+        {COLOR_NUMBER_2048},
+        {COLOR_NUMBER_4096},
+        {COLOR_NUMBER_8192},
+    };
+
+    long number_to_print = pow(2, cellNumber);
+
+    if (cellNumber == 0)
+    {
+        printf("%*c", cellWidth, ' ');
+    }
+    else
+    {
+        if (useColor)
+        {
+            printf("\033[48;2;%d;%d;%dm", 
+                    stat_tile_colours[cellNumber - 1][0],
+                    stat_tile_colours[cellNumber - 1][1],
+                    stat_tile_colours[cellNumber - 1][2]);
+            printf("\033[38;2;%d;%d;%dm", 
+                    stat_number_colours[cellNumber - 1][0],
+                    stat_number_colours[cellNumber - 1][1],
+                    stat_number_colours[cellNumber - 1][2]);
+        }
+        printf("%ld", number_to_print);
+        printf("%*c", cellWidth - DigitsOf(number_to_print), ' ');
+    }
+
+    if (useColor)
+    {
+        for (int i = 1; i < cellHeight; i++)
+        {
+            printf("\033[1B\033[%dD", cellWidth);
+            for (int j = 0; j < cellWidth; j++)
+            {
+                printf(" ");
+            }
+        }
+        printf("\033[%dA", cellHeight - 1);
+    }
+
+    if (useColor)
+    {
+        printf("\033[m");
     }
 }
 

@@ -28,7 +28,8 @@ class Game
         // 3 : down
         void ForceBy(int direction);
 
-        void Print(int cellWidth = 4);
+        void Print(bool useColor = false,
+                   int cellWidth = 4);
 
     private:
 
