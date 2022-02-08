@@ -6,11 +6,6 @@
 #include "utils/RandomUtil.hpp"
 #include <math.h>
 
-#ifndef RESETSEED
-#include <time.h>
-#define RESETSEED (unsigned long)time(NULL)
-#endif
-
 
 
 int DigitsOf(int number)

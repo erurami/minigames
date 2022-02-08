@@ -37,6 +37,11 @@
 #define COLOR_NUMBER_4096   0,   0,   0
 #define COLOR_NUMBER_8192   0,   0,   0
 
+#ifndef RESETSEED
+#include <time.h>
+#define RESETSEED (unsigned long)time(NULL)
+#endif
+
 
 namespace TwoZeroFourEight
 {
