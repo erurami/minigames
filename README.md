@@ -124,6 +124,7 @@ header for 4 in a row game
 constructor of FourInARow::Game
 ```
 explicit Game(int width, int height);
+Game(const Game& game);
 ```
 
 * Arguments
@@ -234,6 +235,59 @@ int GetAt(
   * 0 : no coin
   * 1 : player1's coin
   * 2 : player2's coin
+
+
+### FourInARow::Game::GetEntireBoard
+copies board data into the buffer given
+```
+void GetEntireBoard(
+    [out]   int* pBoardDest
+    );
+```
+
+* Arguments
+  * pBoardDest : pointer to the buffer where the board data will  be copied.
+    * buffer needs to have enough space to write board data.
+    * buffer needs int[width * height] of space.
+
+
+### FourInARow::Game::GetWinningLine
+copies winning line data into the buffer given
+(winning line means a line where the "4" is connected / "4" is in a row.)
+```
+void GetWinningLine(
+    [out]   int* pWinningLineDest
+    );
+```
+
+* Arguments
+  * pWinningLineDest : pointer to the buffer where the winning line data will be copied.
+    * buffer needs int[8] of space to write the data.
+
+
+### FourInARow::Game::GetGameHistory
+copies history data of the game into the buffer given.
+```
+void GetGameHistory(
+    [out]    int* pHistoryDest
+    );
+```
+
+* Arguments
+  * pHistoryDest : A pointer to the buffer where the history will be copied.
+    * buffer needs to have int[width \* height \* 2] of space.
+
+#### history data structure
+int 1 dimentional array.
+The array is treated as 2d array which the size is (width\*height)x2
+```c
+[
+int x1, int y1, // disc position which is put first
+int x2, int y2, // disc position which is put second
+.....
+];
+```
+
 
 ---
 
