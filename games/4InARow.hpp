@@ -12,14 +12,28 @@ class Game
     public:
 
         explicit Game(int width, int height);
+        Game(const Game& game);
         ~Game();
 
-        int GetBoardWidth(void)  {return m_width;};
-        int GetBoardHeight(void) {return m_height;};
-        int GetWhichTurn(void)   {return m_turnPlayer;};
-        int GetTurnNumber(void)  {return m_turnNumber;};
-        int GetGameStatus(void)  {return m_gameStatus;};
-        int GetAt(int x, int y)  {return m_pBoard[y * m_width + y];};
+        Game& operator=(const Game& game);
+
+
+        int GetBoardWidth(void)  const {return m_width;};
+        int GetBoardHeight(void) const {return m_height;};
+        int GetWhichTurn(void)   const {return m_turnPlayer;};
+        int GetTurnNumber(void)  const {return m_turnNumber;};
+        int GetGameStatus(void)  const {return m_gameStatus;};
+        int GetAt(int x, int y)  const {return m_pBoard[y * m_width + y];};
+
+        // pBoardDest : pointer to buffer which the board data will be copied.
+        //              needs to have ehough space.
+        void GetEntireBoard(int* pBoardDest) const;
+        // pWinningLineDest : pointer to buffer which the winnning line will be copied.
+        //                    winnning line buffer needs int [8] of space.
+        void GetWinningLine(int* pWinningLineDest) const;
+        // pHistoryDest : pointer to buffer which the history will be copied.
+        //                buffer needs int [width * height * 2] of space.
+        void GetGameHistory(int* pHistoryDest) const;
 
         // 0 : sccess
         // 1 : wrong turn
@@ -43,6 +57,11 @@ class Game
     private:
 
         void UpdateGameStatus(void);
+
+        void AllocBlankMemberBuffers(void);
+
+        void Reconstruct(const Game& game);
+
 
         int* m_pBoard;
 

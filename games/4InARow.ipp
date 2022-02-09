@@ -5,18 +5,14 @@
 #include "utils/ArrayUtil.hpp"
 
 #include <stdio.h>
+#include <string.h>
 
 FourInARow::Game::Game(int width, int height)
 {
     m_width = width;
     m_height = height;
 
-    m_pBoard = new int[width * height];
-    for (int i = 0; i < (width * height); i++) m_pBoard[i] = 0;
-
-    m_pGameHistory = new int [width * height * 2];
-
-    m_pWinningLine = new int [8];
+    AllocBlankMemberBuffers();
 
     m_turnPlayer = 1;
     m_turnNumber = 0;
@@ -27,11 +23,68 @@ FourInARow::Game::Game(int width, int height)
     m_lastY = -1;
 }
 
+FourInARow::Game::Game(const Game& game)
+{
+    this->Reconstruct(game);
+}
+
 FourInARow::Game::~Game()
 {
     delete [] m_pBoard;
     delete [] m_pGameHistory;
     delete [] m_pWinningLine;
+}
+
+FourInARow::Game& FourInARow::Game::operator = (const Game& game)
+{
+    if (this == &game)
+    {
+        return *this;
+    }
+
+    this->Reconstruct(game);
+
+    return *this;
+}
+
+void FourInARow::Game::Reconstruct(const Game& game)
+{
+    this->m_width = game.m_width;
+    this->m_height = game.m_height;
+
+    this->AllocBlankMemberBuffers();
+
+    this->m_turnPlayer = game.GetWhichTurn();
+    this->m_turnNumber = game.GetTurnNumber();
+
+    this->m_gameStatus = game.GetGameStatus();
+
+    game.GetEntireBoard(this->m_pBoard);
+    game.GetWinningLine(this->m_pWinningLine);
+    game.GetGameHistory(this->m_pGameHistory);
+
+    this->m_lastX = this->m_pGameHistory[(this->m_turnNumber - 1) * 2];
+    this->m_lastY = this->m_pGameHistory[(this->m_turnNumber - 1) * 2 + 1];
+}
+
+
+void FourInARow::Game::GetEntireBoard(int* pBoardDest) const
+{
+    for (int y = 0; y < m_height; y++)
+    {
+        for (int x = 0; x < m_width; x++)
+        {
+            pBoardDest[y * m_width + x] = m_pBoard[y * m_width + x];
+        }
+    }
+}
+void FourInARow::Game::GetWinningLine(int* pWinningLineDest) const
+{
+    memcpy(pWinningLineDest, m_pWinningLine, sizeof(int) * 8);
+}
+void FourInARow::Game::GetGameHistory(int* pHistoryDest) const
+{
+    memcpy(pHistoryDest, m_pGameHistory, sizeof(int) * m_width * m_height * 2);
 }
 
 
@@ -204,6 +257,16 @@ void FourInARow::Game::UpdateGameStatus(void)
     }
 
     return;
+}
+
+void FourInARow::Game::AllocBlankMemberBuffers(void)
+{
+    m_pBoard = new int[m_width * m_height];
+    for (int i = 0; i < (m_width * m_height); i++) m_pBoard[i] = 0;
+
+    m_pGameHistory = new int [m_width * m_height * 2];
+
+    m_pWinningLine = new int [8];
 }
 
 
