@@ -91,6 +91,15 @@ class Game
         int m_lastX;
         int m_lastY;
 
+
+#ifdef MINIGAMES_USEDEBUG
+        // positions to highlight in next print
+        int* m_pHighlightInNextPrint;
+        int  m_highlightPointsCount = 0;
+
+        void AddHighlightPosition_AtColour(int x, int y, int colour);
+#endif
+
 };
 
 }

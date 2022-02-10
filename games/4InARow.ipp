@@ -249,6 +249,15 @@ bool FourInARow::Game::StepOnce(int* x, int*y, int directionX, int directionY)
 }
 
 
+#ifdef MINIGAMES_USEDEBUG
+void AddHighlightPosition_AtColour(int x, int y, int colour)
+{
+    // TODO : 
+}
+#endif
+
+
+
 void FourInARow::Game::AllocBlankMemberBuffers(void)
 {
     m_pBoard = new int[m_width * m_height];
