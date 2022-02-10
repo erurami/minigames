@@ -65,16 +65,22 @@ class Game
         bool StepOnce(int* x, int* y, int directionX, int directionY);
 
 
+        // constructing ------------------------
         void AllocBlankMemberBuffers(void);
 
         void Reconstruct(const Game& game);
+        // -------------------------------------
 
 
+        // board -------------------------------
         int* m_pBoard;
 
         int m_width;
         int m_height;
+        // -------------------------------------
 
+
+        // player ------------------------------
         int m_turnPlayer;
         int m_turnNumber;
 
@@ -84,12 +90,15 @@ class Game
         // 3 : draw
         int m_gameStatus;
         int* m_pWinningLine;
+        // -------------------------------------
 
 
+        // history -----------------------------
         int* m_pGameHistory;
 
         int m_lastX;
         int m_lastY;
+        // -------------------------------------
 
 
 #ifdef MINIGAMES_USEDEBUG

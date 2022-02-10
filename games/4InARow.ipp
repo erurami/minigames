@@ -162,8 +162,6 @@ void FourInARow::Game::Undo(void)
 
 
 
-// TODO: readable code (use functions...)
-
 
 void FourInARow::Game::UpdateGameStatus(void)
 {
@@ -270,7 +268,6 @@ void FourInARow::Game::AllocBlankMemberBuffers(void)
 
 
 
-// TODO : use array to contain number and highlight options and print
 void FourInARow::Game::Print(bool useColor,
                              int highlightLastCoin,
                              int highlightWinningLine)
