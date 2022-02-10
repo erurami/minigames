@@ -163,101 +163,91 @@ void FourInARow::Game::Undo(void)
 
 
 // TODO: readable code (use functions...)
+
+
 void FourInARow::Game::UpdateGameStatus(void)
 {
-    for (int i = 0; i < 4; i++)
-    {
-        int searching_x = m_lastX;
-        int searching_y = m_lastY;
-
-        while (1)
-        {
-            switch (i)
-            {
-                case 0:
-                    searching_x--;
-                    break;
-                case 1:
-                    searching_x--;
-                    searching_y--;
-                    break;
-                case 2:
-                    searching_y--;
-                    break;
-                case 3:
-                    searching_x++;
-                    searching_y--;
-                    break;
-            };
-            if (searching_x <= 0 || searching_x >= (m_width  - 1)||
-                searching_y <= 0 || searching_y >= (m_height - 1))
-            {
-                break;
-            }
-        }
-
-        int continuing_number = -1;
-        int continuing_length = 0;
-
-        int number_now;
-
-        while (1)
-        {
-            switch (i)
-            {
-                case 0:
-                    searching_x++;
-                    break;
-                case 1:
-                    searching_x++;
-                    searching_y++;
-                    break;
-                case 2:
-                    searching_y++;
-                    break;
-                case 3:
-                    searching_x--;
-                    searching_y++;
-                    break;
-            }
-            if (searching_x < 0 || searching_x >= m_width ||
-                searching_y < 0 || searching_y >= m_height)
-            {
-                break;
-            }
-
-            number_now = m_pBoard[searching_y * m_width + searching_x];
-            if (continuing_number == number_now)
-            {
-                continuing_length++;
-            }
-            else
-            {
-                continuing_number = number_now;
-                continuing_length = 1;
-            }
-            m_pWinningLine[(continuing_length - 1) * 2]     = searching_x;
-            m_pWinningLine[(continuing_length - 1) * 2 + 1] = searching_y;
-
-            if (continuing_length >= 4)
-            {
-                continuing_length = 1;
-                if (continuing_number != 0)
-                {
-                    m_gameStatus = continuing_number;
-                    return;
-                }
-            }
-        }
-    }
-
     if (m_turnNumber >= (m_width * m_height) && m_gameStatus == 0)
     {
         m_gameStatus = 3;
+        return;
     }
 
+    int search_from_x;
+    int search_from_y;
+
+#define SEARCH_DIRECTIONOF(x, y) \
+    search_from_x = m_lastX;\
+    search_from_y = m_lastX;\
+    while (StepOnce(&search_from_x, &search_from_y, -(x), -(y)))\
+    {}\
+    if (SearchLine_FromTo(search_from_x, search_from_y, x, y))\
+        return;
+
+    SEARCH_DIRECTIONOF( 1, 0); // horizontal
+    SEARCH_DIRECTIONOF( 0, 1); // vertical
+    SEARCH_DIRECTIONOF( 1, 1); // diagonal : from left-up to right-down
+    SEARCH_DIRECTIONOF(-1, 1); // diagonal : from right-up to left-down
+
+#undef SEARCH_DIRECTIONOF
     return;
 }
+
+bool FourInARow::Game::SearchLine_FromTo(int fromX, int fromY, int directionX, int directionY)
+{
+    int searching_x = fromX;
+    int searching_y = fromY;
+
+    int continuing_number = -1;
+    int continuing_length = 0;
+
+    int number_now;
+
+    for (; StepOnce(&searching_x, &searching_y, directionX, directionY);)
+    {
+        number_now = m_pBoard[searching_y * m_width + searching_x];
+
+        if (continuing_number == number_now)
+        {
+            continuing_length++;
+        }
+        else
+        {
+            continuing_number = number_now;
+            continuing_length = 1;
+        }
+
+        m_pWinningLine[(continuing_length - 1) * 2]     = searching_x;
+        m_pWinningLine[(continuing_length - 1) * 2 + 1] = searching_y;
+
+        if (continuing_length >= 4)
+        {
+            continuing_length = 0;
+            if (continuing_number != 0)
+            {
+                m_gameStatus = continuing_number;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool FourInARow::Game::StepOnce(int* x, int*y, int directionX, int directionY)
+{
+    (*x) += directionX;
+    (*y) += directionY;
+
+    if ((*x) < 0 || (*x) >= m_width ||
+        (*y) < 0 || (*y) >= m_height)
+    {
+        (*x) -= directionX;
+        (*y) -= directionY;
+        return false;
+    }
+    return true;
+}
+
 
 void FourInARow::Game::AllocBlankMemberBuffers(void)
 {

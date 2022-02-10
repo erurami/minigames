@@ -58,6 +58,13 @@ class Game
 
         void UpdateGameStatus(void);
 
+        // return : found win or not
+        bool SearchLine_FromTo(int fromX, int fromY, int directionX, int directionY);
+
+        // step once to the direction and if it's out of the board, reverses the position and returns false.
+        bool StepOnce(int* x, int* y, int directionX, int directionY);
+
+
         void AllocBlankMemberBuffers(void);
 
         void Reconstruct(const Game& game);
