@@ -114,6 +114,50 @@ game.Print();
 
 ---
 
+## Table of contents
+
+* [4InARow.hpp](#4inarowhpp-1)
+  ---
+  * [FourInARow::Game](#fourinarowgame-1)
+    ---
+    * [FourInARow::Game::Game](#fourinarowgamegame)
+    * [FourInARow::Game::Putcoin](#fourinarowgameputcoin)
+    * [FourInARow::Game::Undo](#fourinarowgameundo)
+    * [FourInARow::Game::Print](#fourinarowgameprint)
+    * **Getters**
+    * [FourInARow::Game::GetBoardWidth](#fourinarowgamegetboardwidth)
+    * [FourInARow::Game::GetBoardHeight](#fourinarowgamegetboardheight)
+    * [FourInARow::Game::GetWhichTurn](#fourinarowgamegetwhichturn)
+    * [FourInARow::Game::GetTurnNumber](#fourinarowgamegetturnnumber)
+    * [FourInARow::Game::GetGameStatus](#fourinarowgamegetstatus)
+    * [FourInARow::Game::GetAt](#fourinarowgamegetat)
+    * [FourInARow::Game::GetEntireBoard](#fourinarowgamegetentireboard)
+    * [FourInARow::Game::GetWinningLine](#fourinarowgamegetwinningline)
+    * [FourInARow::Game::GetGameHistory](#fourinarowgamegetgamehistory)
+* [Reversi.hpp](#reversihpp-1)
+  ---
+  * [Reversi::Game](#reversigame-1)
+    ---
+    * [Reversi::Game::Game](#reversigamegame)
+    * [Reversi::Game::PutDisc](#reversigameputdisc)
+    * [Reversi::Game::Print](#reversigameprint)
+    * **Getters**
+    * [Reversi::Game::GetBoardWidth](#reversigamegetboardwidth)
+    * [Reversi::Game::GetBoardHeight](#reversigamegetboardheight)
+    * [Reversi::Game::GetAt](#reversigamegetat)
+    * [Reversi::Game::GetWhichTurn](#reversigamegetwhichturn)
+    * [Reversi::Game::GetGameStatus](#reversigamegetgamestatus)
+    * [Reversi::Game::GetPlayer1Count](#reversigamegetplayer1count)
+    * [Reversi::Game::GetPlayer2Count](#reversigamegetplayer2count)
+    * [Reversi::Game::GetPlacablePositions](#reversigamegetplacablepositions)
+* [2048.hpp](#2048hpp-1)
+  ---
+  * [TwoZeroFourEight::Game](#twozerofoureightgame-1)
+    ---
+    * [TwoZeroFourEight::Game::Game](#twozerofoureightgamegame)
+    * [TwoZeroFourEight::Game::ForceBy](#twozerofoureightgameforceby)
+    * [TwoZeroFourEight::Game::Print](#twozerofoureightgameprint)
+
 ## 4InARow.hpp
 
 header for 4 in a row game
