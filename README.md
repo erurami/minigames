@@ -116,6 +116,8 @@ game.Print();
 
 ## Table of contents
 
+* [File Structure](#file-structure-1)
+  ---
 * [4InARow.hpp](#4inarowhpp-1)
   ---
   * [FourInARow::Game](#fourinarowgame-1)
@@ -157,6 +159,29 @@ game.Print();
     * [TwoZeroFourEight::Game::Game](#twozerofoureightgamegame)
     * [TwoZeroFourEight::Game::ForceBy](#twozerofoureightgameforceby)
     * [TwoZeroFourEight::Game::Print](#twozerofoureightgameprint)
+
+---
+
+## File structure
+```
+.
++-- minigames.hpp               - main header file. Includes other headers which are needed.
+|
++-- games                       - actual header files are here divided by game.
+|   |
+|   +-- 2048.hpp/.ipp           - header for 2048.
+|   +-- 4InARow.hpp/.ipp        - header for 4 in a row.
+|   +-- Reversi.hpp/.ipp        - header for reversi.
+|   |
+|   +-- utils                   - utilities
+|       +-- ArrayUtil.hpp/.ipp  - Array utilities. includes 2d array allocator, releaser.
+|       +-- RandomUtil.hpp/.ipp - Random generation utilities.
+|
++-- LICENCE   - licence.
++-- README.md - readme.
+```
+
+---
 
 ## 4InARow.hpp
 
