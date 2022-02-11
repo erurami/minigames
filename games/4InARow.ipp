@@ -196,7 +196,9 @@ bool FourInARow::Game::SearchLine_Passes_Direction(int x, int y, int directionX,
 
     int number_now;
 
-    for (; StepOnce(&searching_x, &searching_y, directionX, directionY);)
+    for (bool step_result = true;
+         step_result;
+         step_result = StepOnce(&searching_x, &searching_y, directionX, directionY))
     {
         number_now = m_pBoard[searching_y * m_width + searching_x];
 
