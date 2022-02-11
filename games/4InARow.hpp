@@ -59,7 +59,7 @@ class Game
         void UpdateGameStatus(void);
 
         // return : found win or not
-        bool SearchLine_FromTo(int fromX, int fromY, int directionX, int directionY);
+        bool SearchLine_Passes_Direction(int x, int y, int directionX, int directionY);
 
         // step once to the direction and if it's out of the board, reverses the position and returns false.
         bool StepOnce(int* x, int* y, int directionX, int directionY);
@@ -103,8 +103,8 @@ class Game
 
 #ifdef MINIGAMES_USEDEBUG
         // positions to highlight in next print
-        int* m_pHighlightInNextPrint;
-        int  m_highlightPointsCount = 0;
+        int** m_pHighlightInNextPrint;
+        int   m_highlightPointsCount = -1;
 
         void AddHighlightPosition_AtColour(int x, int y, int colour);
 #endif

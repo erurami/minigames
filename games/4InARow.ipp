@@ -33,6 +33,9 @@ FourInARow::Game::~Game()
     delete [] m_pBoard;
     delete [] m_pGameHistory;
     delete [] m_pWinningLine;
+#ifdef MINIGAMES_USEDEBUG
+    // TODO
+#endif
 }
 
 FourInARow::Game& FourInARow::Game::operator = (const Game& game)
@@ -171,30 +174,22 @@ void FourInARow::Game::UpdateGameStatus(void)
         return;
     }
 
-    int search_from_x;
-    int search_from_y;
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  1, 0)) return; // horizontal
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  0, 1)) return; // vertical
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  1, 1)) return; // diagonal : from left-up to right-down
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY, -1, 1)) return; // diagonal : from right-up to left-down
 
-#define SEARCH_DIRECTIONOF(x, y) \
-    search_from_x = m_lastX;\
-    search_from_y = m_lastX;\
-    while (StepOnce(&search_from_x, &search_from_y, -(x), -(y)))\
-    {}\
-    if (SearchLine_FromTo(search_from_x, search_from_y, x, y))\
-        return;
-
-    SEARCH_DIRECTIONOF( 1, 0); // horizontal
-    SEARCH_DIRECTIONOF( 0, 1); // vertical
-    SEARCH_DIRECTIONOF( 1, 1); // diagonal : from left-up to right-down
-    SEARCH_DIRECTIONOF(-1, 1); // diagonal : from right-up to left-down
-
-#undef SEARCH_DIRECTIONOF
     return;
 }
 
-bool FourInARow::Game::SearchLine_FromTo(int fromX, int fromY, int directionX, int directionY)
+bool FourInARow::Game::SearchLine_Passes_Direction(int x, int y, int directionX, int directionY)
 {
-    int searching_x = fromX;
-    int searching_y = fromY;
+    int searching_x = x;
+    int searching_y = y;
+
+    while (StepOnce(&searching_x, &searching_y, -directionX, -directionY))
+    {
+    }
 
     int continuing_number = -1;
     int continuing_length = 0;
@@ -248,9 +243,22 @@ bool FourInARow::Game::StepOnce(int* x, int*y, int directionX, int directionY)
 
 
 #ifdef MINIGAMES_USEDEBUG
-void AddHighlightPosition_AtColour(int x, int y, int colour)
+void FourInARow::Game::AddHighlightPosition_AtColour(int x, int y, int colour)
 {
     // TODO : 
+    if (m_highlightPointsCount == -1)
+    {
+        Alloc2dIntArray(&m_pHighlightInNextPrint, 1, 3, 0);
+        m_highlightPointsCount = 1;
+    }
+    else
+    {
+        m_highlightPointsCount++;
+        Expand2dIntArray_FromTo(&m_pHighlightInNextPrint, m_highlightPointsCount - 1, 3, m_highlightPointsCount, 0);
+    }
+    m_pHighlightInNextPrint[m_highlightPointsCount - 1][0] = x;
+    m_pHighlightInNextPrint[m_highlightPointsCount - 1][1] = y;
+    m_pHighlightInNextPrint[m_highlightPointsCount - 1][2] = colour;
 }
 #endif
 
@@ -358,6 +366,17 @@ void FourInARow::Game::Print(bool useColor,
                 [m_pWinningLine[i * 2    ]] = 3;
         }
     }
+
+#ifdef MINIGAMES_USEDEBUG
+    for (int i = 0; i < m_highlightPointsCount; i++)
+    {
+        print_buffer_backcolor
+            [m_pHighlightInNextPrint[i][1]]
+            [m_pHighlightInNextPrint[i][0]] = m_pHighlightInNextPrint[i][2];
+    }
+    Free2dIntArray(&m_pHighlightInNextPrint, m_highlightPointsCount, 3);
+    m_highlightPointsCount = -1;
+#endif
 
     if (useColor)
     {
