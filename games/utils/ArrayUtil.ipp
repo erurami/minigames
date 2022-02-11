@@ -22,4 +22,24 @@ void Free2dIntArray(int ***pArray, int size1, int size2)
     delete [] *pArray;
 }
 
+void Expand2dIntArray_FromTo(int ***pArray, int oldSize1, int oldSize2, int newSize1, int resetTo)
+{
+    int** new_pointer_array = new int* [newSize1];
+
+    int i;
+    for (i = 0; i < oldSize1; i++)
+    {
+        new_pointer_array[i] = (*pArray)[i];
+    }
+    for (; i < newSize1; i++)
+    {
+        new_pointer_array[i] = new int [oldSize2]{resetTo};
+    }
+
+
+    delete [] (*pArray);
+
+    (*pArray) = new_pointer_array;
+}
+
 
