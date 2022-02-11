@@ -161,6 +161,11 @@ void FourInARow::Game::Undo(void)
 
     m_lastX = m_pGameHistory[(m_turnNumber - 1) * 2];
     m_lastY = m_pGameHistory[(m_turnNumber - 1) * 2 + 1];
+
+    if (m_gameStatus != 0)
+    {
+        UpdateGameStatus();
+    }
 }
 
 
