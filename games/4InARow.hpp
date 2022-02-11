@@ -58,16 +58,29 @@ class Game
 
         void UpdateGameStatus(void);
 
+        // return : found win or not
+        bool SearchLine_Passes_Direction(int x, int y, int directionX, int directionY);
+
+        // step once to the direction and if it's out of the board, reverses the position and returns false.
+        bool StepOnce(int* x, int* y, int directionX, int directionY);
+
+
+        // constructing ------------------------
         void AllocBlankMemberBuffers(void);
 
         void Reconstruct(const Game& game);
+        // -------------------------------------
 
 
+        // board -------------------------------
         int* m_pBoard;
 
         int m_width;
         int m_height;
+        // -------------------------------------
 
+
+        // player ------------------------------
         int m_turnPlayer;
         int m_turnNumber;
 
@@ -77,12 +90,24 @@ class Game
         // 3 : draw
         int m_gameStatus;
         int* m_pWinningLine;
+        // -------------------------------------
 
 
+        // history -----------------------------
         int* m_pGameHistory;
 
         int m_lastX;
         int m_lastY;
+        // -------------------------------------
+
+
+#ifdef MINIGAMES_USEDEBUG
+        // positions to highlight in next print
+        int** m_pHighlightInNextPrint;
+        int   m_highlightPointsCount = -1;
+
+        void AddHighlightPosition_AtColour(int x, int y, int colour);
+#endif
 
 };
 

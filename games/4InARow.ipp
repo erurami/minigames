@@ -33,6 +33,9 @@ FourInARow::Game::~Game()
     delete [] m_pBoard;
     delete [] m_pGameHistory;
     delete [] m_pWinningLine;
+#ifdef MINIGAMES_USEDEBUG
+    // TODO
+#endif
 }
 
 FourInARow::Game& FourInARow::Game::operator = (const Game& game)
@@ -162,102 +165,106 @@ void FourInARow::Game::Undo(void)
 
 
 
-// TODO: readable code (use functions...)
+
 void FourInARow::Game::UpdateGameStatus(void)
 {
-    for (int i = 0; i < 4; i++)
-    {
-        int searching_x = m_lastX;
-        int searching_y = m_lastY;
-
-        while (1)
-        {
-            switch (i)
-            {
-                case 0:
-                    searching_x--;
-                    break;
-                case 1:
-                    searching_x--;
-                    searching_y--;
-                    break;
-                case 2:
-                    searching_y--;
-                    break;
-                case 3:
-                    searching_x++;
-                    searching_y--;
-                    break;
-            };
-            if (searching_x <= 0 || searching_x >= (m_width  - 1)||
-                searching_y <= 0 || searching_y >= (m_height - 1))
-            {
-                break;
-            }
-        }
-
-        int continuing_number = -1;
-        int continuing_length = 0;
-
-        int number_now;
-
-        while (1)
-        {
-            switch (i)
-            {
-                case 0:
-                    searching_x++;
-                    break;
-                case 1:
-                    searching_x++;
-                    searching_y++;
-                    break;
-                case 2:
-                    searching_y++;
-                    break;
-                case 3:
-                    searching_x--;
-                    searching_y++;
-                    break;
-            }
-            if (searching_x < 0 || searching_x >= m_width ||
-                searching_y < 0 || searching_y >= m_height)
-            {
-                break;
-            }
-
-            number_now = m_pBoard[searching_y * m_width + searching_x];
-            if (continuing_number == number_now)
-            {
-                continuing_length++;
-            }
-            else
-            {
-                continuing_number = number_now;
-                continuing_length = 1;
-            }
-            m_pWinningLine[(continuing_length - 1) * 2]     = searching_x;
-            m_pWinningLine[(continuing_length - 1) * 2 + 1] = searching_y;
-
-            if (continuing_length >= 4)
-            {
-                continuing_length = 1;
-                if (continuing_number != 0)
-                {
-                    m_gameStatus = continuing_number;
-                    return;
-                }
-            }
-        }
-    }
-
     if (m_turnNumber >= (m_width * m_height) && m_gameStatus == 0)
     {
         m_gameStatus = 3;
+        return;
     }
+
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  1, 0)) return; // horizontal
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  0, 1)) return; // vertical
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  1, 1)) return; // diagonal : from left-up to right-down
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY, -1, 1)) return; // diagonal : from right-up to left-down
 
     return;
 }
+
+bool FourInARow::Game::SearchLine_Passes_Direction(int x, int y, int directionX, int directionY)
+{
+    int searching_x = x;
+    int searching_y = y;
+
+    while (StepOnce(&searching_x, &searching_y, -directionX, -directionY))
+    {
+    }
+
+    int continuing_number = -1;
+    int continuing_length = 0;
+
+    int number_now;
+
+    for (bool step_result = true;
+         step_result;
+         step_result = StepOnce(&searching_x, &searching_y, directionX, directionY))
+    {
+        number_now = m_pBoard[searching_y * m_width + searching_x];
+
+        if (continuing_number == number_now)
+        {
+            continuing_length++;
+        }
+        else
+        {
+            continuing_number = number_now;
+            continuing_length = 1;
+        }
+
+        m_pWinningLine[(continuing_length - 1) * 2]     = searching_x;
+        m_pWinningLine[(continuing_length - 1) * 2 + 1] = searching_y;
+
+        if (continuing_length >= 4)
+        {
+            continuing_length = 0;
+            if (continuing_number != 0)
+            {
+                m_gameStatus = continuing_number;
+                return true;
+            }
+        }
+    }
+    return false;
+}
+
+bool FourInARow::Game::StepOnce(int* x, int*y, int directionX, int directionY)
+{
+    (*x) += directionX;
+    (*y) += directionY;
+
+    if ((*x) < 0 || (*x) >= m_width ||
+        (*y) < 0 || (*y) >= m_height)
+    {
+        (*x) -= directionX;
+        (*y) -= directionY;
+        return false;
+    }
+    return true;
+}
+
+
+#ifdef MINIGAMES_USEDEBUG
+void FourInARow::Game::AddHighlightPosition_AtColour(int x, int y, int colour)
+{
+    // TODO : 
+    if (m_highlightPointsCount == -1)
+    {
+        Alloc2dIntArray(&m_pHighlightInNextPrint, 1, 3, 0);
+        m_highlightPointsCount = 1;
+    }
+    else
+    {
+        m_highlightPointsCount++;
+        Expand2dIntArray_FromTo(&m_pHighlightInNextPrint, m_highlightPointsCount - 1, 3, m_highlightPointsCount, 0);
+    }
+    m_pHighlightInNextPrint[m_highlightPointsCount - 1][0] = x;
+    m_pHighlightInNextPrint[m_highlightPointsCount - 1][1] = y;
+    m_pHighlightInNextPrint[m_highlightPointsCount - 1][2] = colour;
+}
+#endif
+
+
 
 void FourInARow::Game::AllocBlankMemberBuffers(void)
 {
@@ -271,7 +278,6 @@ void FourInARow::Game::AllocBlankMemberBuffers(void)
 
 
 
-// TODO : use array to contain number and highlight options and print
 void FourInARow::Game::Print(bool useColor,
                              int highlightLastCoin,
                              int highlightWinningLine)
@@ -362,6 +368,17 @@ void FourInARow::Game::Print(bool useColor,
                 [m_pWinningLine[i * 2    ]] = 3;
         }
     }
+
+#ifdef MINIGAMES_USEDEBUG
+    for (int i = 0; i < m_highlightPointsCount; i++)
+    {
+        print_buffer_backcolor
+            [m_pHighlightInNextPrint[i][1]]
+            [m_pHighlightInNextPrint[i][0]] = m_pHighlightInNextPrint[i][2];
+    }
+    Free2dIntArray(&m_pHighlightInNextPrint, m_highlightPointsCount, 3);
+    m_highlightPointsCount = -1;
+#endif
 
     if (useColor)
     {
