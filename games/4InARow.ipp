@@ -164,6 +164,7 @@ void FourInARow::Game::Undo(void)
 
     if (m_gameStatus != 0)
     {
+        m_gameStatus = 0;
         UpdateGameStatus();
     }
 }
