@@ -23,7 +23,7 @@ class Game
         int GetWhichTurn(void)   const {return m_turnPlayer;};
         int GetTurnNumber(void)  const {return m_turnNumber;};
         int GetGameStatus(void)  const {return m_gameStatus;};
-        int GetAt(int x, int y)  const {return m_pBoard[y * m_width + y];};
+        int GetAt(int x, int y)  const {return m_pBoard[y * m_width + x];};
 
         // pBoardDest : pointer to buffer which the board data will be copied.
         //              needs to have ehough space.
