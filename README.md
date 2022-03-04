@@ -131,7 +131,7 @@ game.Print();
     * [FourInARow::Game::GetBoardHeight](#fourinarowgamegetboardheight)
     * [FourInARow::Game::GetWhichTurn](#fourinarowgamegetwhichturn)
     * [FourInARow::Game::GetTurnNumber](#fourinarowgamegetturnnumber)
-    * [FourInARow::Game::GetGameStatus](#fourinarowgamegetstatus)
+    * [FourInARow::Game::GetGameStatus](#fourinarowgamegetgamestatus)
     * [FourInARow::Game::GetAt](#fourinarowgamegetat)
     * [FourInARow::Game::GetEntireBoard](#fourinarowgamegetentireboard)
     * [FourInARow::Game::GetWinningLine](#fourinarowgamegetwinningline)
