@@ -346,10 +346,10 @@ bool Reversi::Game::SearchLine(int fromX, int fromY,
 
     x += directionX;
     y += directionY;
-    while (not(x < 0 ||
-               x >= m_width ||
-               y < 0 ||
-               y >= m_height))
+    while (!(x < 0 ||
+             x >= m_width ||
+             y < 0 ||
+             y >= m_height))
     {
         if (m_pBoard[y][x] == searchFor)
         {
