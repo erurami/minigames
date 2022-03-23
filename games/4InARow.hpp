@@ -44,6 +44,12 @@ class Game
         void Undo(void);
 
 
+        int  GetSaveSize(void);
+
+        void Export(char* strSaveData, int bufSize);
+        int  Import(char* strSaveData);
+
+
         // highlighting parameter options
         //            0 : no highlight
         //            1 : add asterisk
