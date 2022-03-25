@@ -32,27 +32,27 @@ To use these libraries, you can include `minigames.hpp` in root directory
 ### 4-in-a-row
 
 * firstly, you'll need to make game instance for 4 in a row game.
-```
+```c++
 FourInARow::Game game(width, height);
 ```
 
 * Use [PutCoin()](#fourinarowgameputcoin) to put the coin.
-```
+```c++
 game.PutCoin(column);
 ```
 
 * And don't forget to check game status when you put the coin by [GetGameStatus()](#fourinarowgamegetgamestatus)
-```
+```c++
 game.GetGameStatus();
 ```
 
 * You can [Undo()](#fourinarowgameundo) the game if you made a mistake.
-```
+```c++
 game.Undo();
 ```
 
 * Lazy at displaying the game board? [Print()](#fourinarowgameprint) will do it for you.
-```
+```c++
 game.Print();
 ```
 
@@ -63,22 +63,22 @@ game.Print();
 ### Reversi
 
 * First, you'll need game board to play reversi.
-```
+```c++
 Reversi::Game game(width, height);
 ```
 
 * Use [PutDisc()](#reversigameputdisc) to Put disc on the board.
-```
+```c++
 game.Putdisc(x, y);
 ```
 
 * [Print()](#reversigameprint) to print the reversi board to stdout.
-```
+```c++
 game.Print();
 ```
 
 * And you'll need to check game status using [GetGameStatus()](#reversigamegetgamestatus)
-```
+```c++
 game.GetGameStatus();
 ```
 
@@ -91,17 +91,17 @@ __Notice__ : Undo() is not available. You can't use Undo().
 ### 2048
 
 * First, you can create game by
-```
+```c++
 TwoZeroFourEight::Game game();
 ```
 
 * This game is simple, you can use [ForceBy()](#twozerofoureightgameforceby) to move tiles.
-```
+```c++
 game.ForceBy([direction]_2048);
 ```
 
 * [Print()](#twozerofoureightgameprint) outputs board to stdout.
-```
+```c++
 game.Print();
 ```
 
@@ -114,6 +114,75 @@ game.Print();
 
 ---
 
+## Table of contents
+
+* [File Structure](#file-structure-1)
+  ---
+* [4InARow.hpp](#4inarowhpp-1)
+  ---
+  * [FourInARow::Game](#fourinarowgame-1)
+    ---
+    * [FourInARow::Game::Game](#fourinarowgamegame)
+    * [FourInARow::Game::Putcoin](#fourinarowgameputcoin)
+    * [FourInARow::Game::Undo](#fourinarowgameundo)
+    * [FourInARow::Game::Print](#fourinarowgameprint)
+    * **Getters**
+    * [FourInARow::Game::GetBoardWidth](#fourinarowgamegetboardwidth)
+    * [FourInARow::Game::GetBoardHeight](#fourinarowgamegetboardheight)
+    * [FourInARow::Game::GetWhichTurn](#fourinarowgamegetwhichturn)
+    * [FourInARow::Game::GetTurnNumber](#fourinarowgamegetturnnumber)
+    * [FourInARow::Game::GetGameStatus](#fourinarowgamegetgamestatus)
+    * [FourInARow::Game::GetAt](#fourinarowgamegetat)
+    * [FourInARow::Game::GetEntireBoard](#fourinarowgamegetentireboard)
+    * [FourInARow::Game::GetWinningLine](#fourinarowgamegetwinningline)
+    * [FourInARow::Game::GetGameHistory](#fourinarowgamegetgamehistory)
+* [Reversi.hpp](#reversihpp-1)
+  ---
+  * [Reversi::Game](#reversigame-1)
+    ---
+    * [Reversi::Game::Game](#reversigamegame)
+    * [Reversi::Game::PutDisc](#reversigameputdisc)
+    * [Reversi::Game::Print](#reversigameprint)
+    * **Getters**
+    * [Reversi::Game::GetBoardWidth](#reversigamegetboardwidth)
+    * [Reversi::Game::GetBoardHeight](#reversigamegetboardheight)
+    * [Reversi::Game::GetAt](#reversigamegetat)
+    * [Reversi::Game::GetWhichTurn](#reversigamegetwhichturn)
+    * [Reversi::Game::GetGameStatus](#reversigamegetgamestatus)
+    * [Reversi::Game::GetPlayer1Count](#reversigamegetplayer1count)
+    * [Reversi::Game::GetPlayer2Count](#reversigamegetplayer2count)
+    * [Reversi::Game::GetPlacablePositions](#reversigamegetplacablepositions)
+* [2048.hpp](#2048hpp-1)
+  ---
+  * [TwoZeroFourEight::Game](#twozerofoureightgame-1)
+    ---
+    * [TwoZeroFourEight::Game::Game](#twozerofoureightgamegame)
+    * [TwoZeroFourEight::Game::ForceBy](#twozerofoureightgameforceby)
+    * [TwoZeroFourEight::Game::Print](#twozerofoureightgameprint)
+
+---
+
+## File structure
+```
+.
++-- minigames.hpp               - main header file. Includes other headers which are needed.
+|
++-- games                       - actual header files are here divided by game.
+|   |
+|   +-- 2048.hpp/.ipp           - header for 2048.
+|   +-- 4InARow.hpp/.ipp        - header for 4 in a row.
+|   +-- Reversi.hpp/.ipp        - header for reversi.
+|   |
+|   +-- utils                   - utilities
+|       +-- ArrayUtil.hpp/.ipp  - Array utilities. includes 2d array allocator, releaser.
+|       +-- RandomUtil.hpp/.ipp - Random generation utilities.
+|
++-- LICENCE   - licence.
++-- README.md - readme.
+```
+
+---
+
 ## 4InARow.hpp
 
 header for 4 in a row game
@@ -122,7 +191,7 @@ header for 4 in a row game
 
 ### FourInARow::Game::Game
 constructor of FourInARow::Game
-```
+```c++
 explicit Game(int width, int height);
 Game(const Game& game);
 ```
@@ -134,7 +203,7 @@ Game(const Game& game);
 
 ### FourInARow::Game::PutCoin
 Puts the coin in the specified column.
-```
+```c++
 int PutCoin(
     [in]           int column,
     [in][optional] int player
@@ -153,13 +222,13 @@ int PutCoin(
 
 ### FourInARow::Game::Undo
 Undos the game.
-```
+```c++
 void Undo(void);
 ```
 
 ### FourInARow::Game::Print
 Prints the game.
-```
+```c++
 void Print(
     [in][optional] bool useColor          = false,
     [in][optional] int  highlightLastCoin = 0,
@@ -179,20 +248,20 @@ void Print(
 
 ### FourInARow::Game::GetBoardWidth
 Returns board width
-```
+```c++
 int GetBoardWidth(void);
 ```
 
 ### FourInARow::Game::GetBoardHeight
 Returns board height
-```
+```c++
 int GetBoardHeight(void);
 ```
 
 
 ### FourInARow::Game::GetWhichTurn
 Returns turn of the game.
-```
+```c++
 int GetWhichTurn(void);
 ```
 
@@ -202,14 +271,14 @@ int GetWhichTurn(void);
 
 ### FourInARow::Game::GetTurnNumber
 Returns number of turn (Nth) turn.
-```
+```c++
 int GetTurnNumber(void);
 ```
 
 
 ### FourInARow::Game::GetGameStatus
 Returns status of the game.
-```
+```c++
 int GetGameStatus(void);
 ```
 
@@ -221,7 +290,7 @@ int GetGameStatus(void);
 
 ### FourInARow::Game::GetAt
 Returns the status of specified location of the board
-```
+```c++
 int GetAt(
     [in]   int x,
     [in]   int y
@@ -239,7 +308,7 @@ int GetAt(
 
 ### FourInARow::Game::GetEntireBoard
 copies board data into the buffer given
-```
+```c++
 void GetEntireBoard(
     [out]   int* pBoardDest
     );
@@ -254,7 +323,7 @@ void GetEntireBoard(
 ### FourInARow::Game::GetWinningLine
 copies winning line data into the buffer given
 (winning line means a line where the "4" is connected / "4" is in a row.)
-```
+```c++
 void GetWinningLine(
     [out]   int* pWinningLineDest
     );
@@ -267,7 +336,7 @@ void GetWinningLine(
 
 ### FourInARow::Game::GetGameHistory
 copies history data of the game into the buffer given.
-```
+```c++
 void GetGameHistory(
     [out]    int* pHistoryDest
     );
@@ -281,11 +350,11 @@ void GetGameHistory(
 int 1 dimentional array.
 The array is treated as 2d array which the size is (width\*height)x2
 ```c
-[
+{
 int x1, int y1, // disc position which is put first
 int x2, int y2, // disc position which is put second
 .....
-];
+};
 ```
 
 
@@ -299,7 +368,7 @@ header for reversi game
 
 ### Reversi::Game::Game
 constructor of Reversi::Game
-```
+```c++
 explicit Game();
 explicit Game(int width, int height);
 ```
@@ -313,7 +382,7 @@ explicit Game(int width, int height);
 
 ### Reversi::Game::PutDisc
 Puts disc on the board
-```
+```c++
 int PutDisc(
     [in]   int x,
     [in]   int y
@@ -332,7 +401,7 @@ int PutDisc(
 
 ### Reversi::Game::Print
 Prints the board to stdout.
-```
+```c++
 void Print(
     [in][optional] bool useColor = false,
     [in][optional] bool printRuler = false,
@@ -350,21 +419,21 @@ void Print(
 
 ### Reversi::Game::GetBoardWidth
 Returns the width of the board.
-```
+```c++
 int GetBoardWidth(void);
 ```
 
 
 ### Reversi::Game::GetBoardHeight
 Returns the height of the board.
-```
+```c++
 int GetBoardHeight(void);
 ```
 
 
 ### Reversi::Game::GetAt
 Returns state of specified location on the board.
-```
+```c++
 int GetAt(
     [in]   int x,
     [in]   int y
@@ -378,7 +447,7 @@ int GetAt(
 
 ### Reversi::Game::GetWhichTurn
 Returns turn of the game.
-```
+```c++
 int GetWhichTurn(void);
 ```
 
@@ -388,7 +457,7 @@ int GetWhichTurn(void);
 
 ### Reversi::Game::GetGameStatus
 Returns status of the game
-```
+```c++
 int GetGameStatus(void);
 ```
 
@@ -400,21 +469,21 @@ int GetGameStatus(void);
 
 ### Reversi::Game::GetPlayer1Count
 Returns number of disc of player1 on the board.
-```
+```c++
 int GetPlayer1Count(void);
 ```
 
 
 ### Reversi::Game::GetPlayer2Count
 Returns number of disc of player2 on the board.
-```
+```c++
 int GetPlayer2Count(void);
 ```
 
 
 ### Reversi::Game::GetPlacablePositions
 Returns number of placable positions and placable position.
-```
+```c++
 int GetPlacablePositions(
     [out] int*** PlacablePositionsBufAddr
     );
@@ -452,14 +521,14 @@ header for 2048 game.
 
 ### TwoZeroFourEight::Game::Game
 constructor of TwoZeroFourEight::Game
-```
+```c++
 explicit Game();
 ```
 
 
 ### TwoZeroFourEight::Game::ForceBy
 Move Tiles (This means pressing arrow keys in original 2048 game)
-```
+```c++
 void ForceBy(
     [in]  int direction
     );
@@ -475,7 +544,7 @@ void ForceBy(
 
 ### TwoZeroFourEight::Game::Print
 Print the board to stdout
-```
+```c++
 void Print(
     [in][optional]  bool useColor = false,
     [in][optional]  int  cellWidth = 4);
