@@ -126,7 +126,9 @@ game.Print();
     * [FourInARow::Game::Putcoin](#fourinarowgameputcoin)
     * [FourInARow::Game::Undo](#fourinarowgameundo)
     * [FourInARow::Game::Print](#fourinarowgameprint)
-    * **Getters**
+    * [FourInARow::Game::GetSaveSize](#fourinarowgetsavesize)
+    * [FourinARow::Game::Export](#fourinarowgameexport)
+    * [FourInARow::Game::Import](#fourinarowgameimport)
     * [FourInARow::Game::GetBoardWidth](#fourinarowgamegetboardwidth)
     * [FourInARow::Game::GetBoardHeight](#fourinarowgamegetboardheight)
     * [FourInARow::Game::GetWhichTurn](#fourinarowgamegetwhichturn)
@@ -244,6 +246,41 @@ void Print(
     * 0 : no highlighting
     * 1 : add asterisk after the number
     * 2 : highlight text (only when useColor == true)
+
+
+### FourinARow::Game::GetSaveSize
+returns the size of save data which can export by [FourinARow::Game::Export](#fourinarowgameexport)
+```c++
+int GetSaveSize(void);
+```
+
+### FourInARow::Game::Export
+exports the game including histories as a string
+```c++
+void Export(
+    [out] char* strSaveData,
+    [in]  int   bufSize
+    );
+```
+
+* Arguments
+  * strSaveData : pointer to a buffer that receives savedata.
+  * bufSize : size of the buffer.
+
+
+### FourInARow::Game::Import
+imports the save exported by [FourInARow::Game::Export](#fourinarowgameexport)
+```c++
+int Import(
+    [in] char* strSaveData
+    );
+```
+
+* Arguments
+  * strSaveData : savedata
+* Returns
+  * 0 : failed
+  * 1 : succeed
 
 
 ### FourInARow::Game::GetBoardWidth
