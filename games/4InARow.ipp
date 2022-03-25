@@ -6,6 +6,7 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 FourInARow::Game::Game(int width, int height)
 {
@@ -280,6 +281,205 @@ void FourInARow::Game::AllocBlankMemberBuffers(void)
     m_pGameHistory = new int [m_width * m_height * 2];
 
     m_pWinningLine = new int [8];
+}
+
+
+
+
+int _FourInARow_IntToIntarr(int num, int base, int* numBuf = NULL, int bufsize = 0);
+
+int FourInARow::Game::GetSaveSize(void)
+{
+    int save_size = 0;
+    save_size += _FourInARow_IntToIntarr(m_width, 10);
+    save_size += _FourInARow_IntToIntarr(m_height, 10);
+    save_size += 2;
+    save_size += _FourInARow_IntToIntarr((m_width * m_height), 32) * m_width * m_height;
+    return save_size;
+}
+
+void FourInARow::Game::Export(char* strSaveData, int bufSize)
+{
+    snprintf(strSaveData, bufSize, "%d,%d,", m_width, m_height);
+
+    int* main_save;
+    main_save = new int[m_width * m_height];
+    for (int i = 0; i < (m_width * m_height); i++) main_save[i] = 0;
+
+    for (int i = 0; i < m_turnNumber; i++)
+    {
+        int x, y;
+        x = m_pGameHistory[i * 2];
+        y = m_pGameHistory[i * 2 + 1];
+
+        main_save[y * m_width + x] = i + 1;
+    }
+
+
+    int digits_each_cell = _FourInARow_IntToIntarr(m_width * m_height, 64);
+    int*  saving_cell_data_int;
+    char* saving_cell_data;
+    saving_cell_data_int = new int  [digits_each_cell];
+    saving_cell_data     = new char [digits_each_cell + 1];
+
+    for (int i = 0; i < (m_width * m_height); i++)
+    {
+        _FourInARow_IntToIntarr(main_save[i], 64, saving_cell_data_int, digits_each_cell);
+        for (int j = 0; j < digits_each_cell; j++)
+        {
+            saving_cell_data[j] = (char)(saving_cell_data_int[j] + 33);
+        }
+        saving_cell_data[digits_each_cell] = '\0';
+        strcat(strSaveData, saving_cell_data);
+    }
+
+    delete [] saving_cell_data;
+    delete [] main_save;
+}
+
+int _FourInARow_IntToIntarr(int num, int base, int* numBuf, int bufsize)
+{
+    int digits_count = 1;
+
+    if (numBuf == NULL)
+    {
+        bufsize = 0;
+        numBuf = new int [1];
+    }
+
+    numBuf[0] = num;
+
+    while (numBuf[0] >= base)
+    {
+        if (digits_count >= bufsize &&
+            bufsize != 0)
+        {
+            return 0;
+        }
+
+        for (int i = digits_count; i > 1; i--)
+        {
+            numBuf[i] = numBuf[i - 1];
+        }
+
+        numBuf[1] = numBuf[0] % base;
+        numBuf[0] = numBuf[0] / base;
+
+        digits_count++;
+    }
+
+    return digits_count;
+}
+
+
+int _FourinARow_IntArrToInt(int* IntArr, int ArrLen, int base);
+
+int FourInARow::Game::Import(char* strSaveData)
+{
+    int save_length = (int)strlen(strSaveData);
+
+    char* pWidth  = NULL;
+    char* pHeight = NULL;
+    char* pSave   = NULL;
+
+    pWidth = strSaveData;
+
+    int comma_count = 0;
+    for (int i = 0; i < save_length; i++)
+    {
+        if (strSaveData[i] == ',')
+        {
+            comma_count++;
+            switch (comma_count)
+            {
+                case 1:
+                    pHeight = &(strSaveData[i + 1]);
+                    strSaveData[i] = '\0';
+                    break;
+                case 2:
+                    pSave = &(strSaveData[i + 1]);
+                    strSaveData[i] = '\0';
+                    break;
+                default:
+                    return 0;
+            }
+        }
+    }
+
+    if (comma_count != 2)
+    {
+        return 0;
+    }
+
+    int board_width  = atoi(pWidth);
+    int board_height = atoi(pHeight);
+
+    printf("width  : %d\nheight : %d\n", board_width, board_height);
+
+    int digits_each_cell = _FourInARow_IntToIntarr(board_width * board_height, 64);
+
+    if ((board_width * board_height * digits_each_cell) != strlen(pSave))
+    {
+        return 0;
+    }
+
+    int* saved_rows_to_put;
+    saved_rows_to_put = new int [board_width * board_height];
+    int saved_puts_count = 0;
+
+    int* cell_data_arr;
+    cell_data_arr = new int [digits_each_cell];
+    for (int i = 0; i < (board_width * board_height); i++)
+    {
+        for (int j = 0; j < digits_each_cell; j++)
+        {
+            cell_data_arr[j] = pSave[digits_each_cell * i + j] - 33;
+        }
+        int cell_data;
+        cell_data = _FourinARow_IntArrToInt(cell_data_arr, digits_each_cell, 64);
+        if (cell_data == 0)
+        {
+            continue;
+        }
+
+        saved_puts_count++;
+        saved_rows_to_put[cell_data - 1] = i % board_width;
+    }
+    delete [] cell_data_arr;
+
+    m_width  = board_width;
+    m_height = board_height;
+
+    AllocBlankMemberBuffers();
+
+    m_turnPlayer = 1;
+    m_turnNumber = 0;
+
+    m_gameStatus = 0;
+
+    m_lastX = -1;
+    m_lastY = -1;
+
+    for (int i = 0; i < saved_puts_count; i++)
+    {
+        PutCoin(saved_rows_to_put[i]);
+    }
+    delete [] saved_rows_to_put;
+
+    return 1;
+}
+
+int _FourinARow_IntArrToInt(int* IntArr, int ArrLen, int base)
+{
+    int num = 0;
+
+    for (int i = 0; i < ArrLen; i++)
+    {
+        num *= base;
+        num += IntArr[i];
+    }
+
+    return num;
 }
 
 
