@@ -414,8 +414,6 @@ int FourInARow::Game::Import(char* strSaveData)
     int board_width  = atoi(pWidth);
     int board_height = atoi(pHeight);
 
-    printf("width  : %d\nheight : %d\n", board_width, board_height);
-
     int digits_each_cell = _FourInARow_IntToIntarr(board_width * board_height, 64);
 
     if ((board_width * board_height * digits_each_cell) != strlen(pSave))
