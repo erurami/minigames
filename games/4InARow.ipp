@@ -175,16 +175,16 @@ void FourInARow::Game::Undo(void)
 
 void FourInARow::Game::UpdateGameStatus(void)
 {
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  1, 0)) return; // horizontal
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  0, 1)) return; // vertical
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  1, 1)) return; // diagonal : from left-up to right-down
+    if (SearchLine_Passes_Direction(m_lastX, m_lastY, -1, 1)) return; // diagonal : from right-up to left-down
+
     if (m_turnNumber >= (m_width * m_height) && m_gameStatus == 0)
     {
         m_gameStatus = 3;
         return;
     }
-
-    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  1, 0)) return; // horizontal
-    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  0, 1)) return; // vertical
-    if (SearchLine_Passes_Direction(m_lastX, m_lastY,  1, 1)) return; // diagonal : from left-up to right-down
-    if (SearchLine_Passes_Direction(m_lastX, m_lastY, -1, 1)) return; // diagonal : from right-up to left-down
 
     return;
 }
