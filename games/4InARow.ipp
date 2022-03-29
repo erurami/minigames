@@ -300,7 +300,7 @@ int FourInARow::Game::GetSaveSize(void)
 
 void FourInARow::Game::Export(char* strSaveData, int bufSize)
 {
-    snprintf(strSaveData, bufSize, "%d,%d,", m_width, m_height);
+    snprintf(strSaveData, bufSize, "%d|%d|", m_width, m_height);
 
     int* main_save;
     main_save = new int[m_width * m_height];
@@ -387,7 +387,7 @@ int FourInARow::Game::Import(char* strSaveData)
     int comma_count = 0;
     for (int i = 0; i < save_length; i++)
     {
-        if (strSaveData[i] == ',')
+        if (strSaveData[i] == '|')
         {
             comma_count++;
             switch (comma_count)
@@ -460,6 +460,9 @@ int FourInARow::Game::Import(char* strSaveData)
 
     for (int i = 0; i < saved_puts_count; i++)
     {
+#ifdef DEBUG
+        printf("%d ", saved_rows_to_put[i]);
+#endif
         PutCoin(saved_rows_to_put[i]);
     }
     delete [] saved_rows_to_put;
