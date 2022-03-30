@@ -315,11 +315,24 @@ void FourInARow::Game::Export(char* strSaveData, int bufSize)
         main_save[y * m_width + x] = i + 1;
     }
 
+#ifdef DEBUG
+    for (int y = 0; y < m_height; y++)
+    {
+        for (int x = 0; x < m_width; x++)
+        {
+            printf("%d ", main_save[y * m_width + x]);
+        }
+        printf("\n");
+    }
+#endif
 
     int digits_each_cell = _FourInARow_IntToIntarr(m_width * m_height, 64);
+#ifdef DEBUG
+    printf("digits each cell : %d\n", digits_each_cell);
+#endif
     int*  saving_cell_data_int;
     char* saving_cell_data;
-    saving_cell_data_int = new int  [digits_each_cell];
+    saving_cell_data_int = new int  [digits_each_cell] {0};
     saving_cell_data     = new char [digits_each_cell + 1];
 
     for (int i = 0; i < (m_width * m_height); i++)
@@ -368,6 +381,15 @@ int _FourInARow_IntToIntarr(int num, int base, int* numBuf, int bufsize)
         digits_count++;
     }
 
+    for (int i = digits_count; i < bufsize; i++)
+    {
+        for (int j = i; j > 0; j--)
+        {
+            numBuf[j] = numBuf[j - 1];
+        }
+        numBuf[0] = 0;
+    }
+
     return digits_count;
 }
 
@@ -414,6 +436,10 @@ int FourInARow::Game::Import(char* strSaveData)
     int board_width  = atoi(pWidth);
     int board_height = atoi(pHeight);
 
+#ifdef DEBUG
+    printf("board size : %d x %d\n", board_width, board_height);
+#endif
+
     int digits_each_cell = _FourInARow_IntToIntarr(board_width * board_height, 64);
 
     if ((board_width * board_height * digits_each_cell) != strlen(pSave))
@@ -429,12 +455,28 @@ int FourInARow::Game::Import(char* strSaveData)
     cell_data_arr = new int [digits_each_cell];
     for (int i = 0; i < (board_width * board_height); i++)
     {
+#ifdef DEBUG
+        printf("[");
+#endif
         for (int j = 0; j < digits_each_cell; j++)
         {
             cell_data_arr[j] = pSave[digits_each_cell * i + j] - 33;
+#ifdef DEBUG
+            printf("%2d ", cell_data_arr[j]);
+#endif
         }
+#ifdef DEBUG
+        printf("]");
+#endif
         int cell_data;
         cell_data = _FourinARow_IntArrToInt(cell_data_arr, digits_each_cell, 64);
+#ifdef DEBUG
+        printf("%2d ", cell_data);
+        if ((i % m_width + 1) == m_width)
+        {
+            printf("\n");
+        }
+#endif
         if (cell_data == 0)
         {
             continue;
